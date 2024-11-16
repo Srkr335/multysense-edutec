@@ -12,6 +12,11 @@ use App\Http\Controllers\Admin\SettingsController;
 use App\Http\Controllers\Admin\StudentController;
 use App\Http\Controllers\Admin\TutorController;
 use App\Http\Controllers\Admin\TagController;
+use App\Http\Controllers\Admin\BatchController;
+use App\Http\Controllers\Admin\CentreController;
+use App\Http\Controllers\Admin\ExamController;
+use App\Http\Controllers\Admin\ModulesController;
+use App\Http\Controllers\Admin\ResultController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserCourseViewController;
 use App\Http\Controllers\userinstructorController;
@@ -98,6 +103,7 @@ Route::middleware(['auth', 'user-access:admin'])->group(function () {
         Route::get('/quiz/edit/{id}', [QuizController::class, 'edit'])->name('admin.quiz.edit');
         Route::post('/quiz/update/{id}', [QuizController::class, 'update'])->name('admin.quiz.update');
         Route::get('/quiz/destroy/{id}', [QuizController::class, 'destroy'])->name('admin.quiz.destroy');
+        Route::post('/quiz/import', [QuizController::class, 'import'])->name('admin.exam.import');
 
         // settings
         Route::get('/settings', [SettingsController::class, 'index'])->name('settings');
@@ -121,6 +127,32 @@ Route::middleware(['auth', 'user-access:admin'])->group(function () {
         Route::get('/services/edit/{id}', [ServiceController::class, 'edit'])->name('admin.services.edit');
         Route::post('/services/update/{id} ', [ServiceController::class, 'update'])->name('admin.services.update');
         Route::get('/services/delete/{id} ', [ServiceController::class, 'destroy'])->name('admin.services.delete');
+
+        //batch
+        Route::resource('batch',BatchController::class);
+        Route::post('batch/update',[BatchController::class, 'update'])->name('admin.batch.update');
+        Route::post('batch/delete',[BatchController::class, 'destroy'])->name('admin.batch.delete');
+        
+        //centre
+        Route::resource('centre',CentreController::class);
+        Route::post('centre/update',[CentreController::class, 'update'])->name('admin.centre.update');
+        Route::post('centre/delete',[CentreController::class, 'destroy'])->name('admin.centre.delete');
+
+
+        //exam
+        Route::resource('exam',ExamController::class);
+        Route::post('exam/update',[ExamController::class, 'update'])->name('admin.exam.update');
+        Route::post('exam/delete',[ExamController::class, 'destroy'])->name('admin.exam.delete');
+
+        //module
+        Route::resource('modules',ModulesController::class);
+        Route::post('modules/update',[ModulesController::class, 'update'])->name('admin.modules.update');
+        Route::post('modules/delete',[ModulesController::class, 'destroy'])->name('admin.modules.delete');
+
+         //exam result
+         Route::resource('exam_result',ResultController::class);
+        //  Route::post('modules/update',[ModulesController::class, 'update'])->name('admin.modules.update');
+        //  Route::post('modules/delete',[ModulesController::class, 'destroy'])->name('admin.modules.delete');
     });
 });
 

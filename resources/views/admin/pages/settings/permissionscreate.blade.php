@@ -25,8 +25,42 @@
                                             <div class="text-dark ">
                                                 <h5 class="mb-3">Select Permissions</h5>
                                               </div>
-
                                             <div class="col-md-4">
+                                                <div class="card" data-select2-id="14">
+                                                    <div class="widget-set" data-select2-id="13">
+                                                      <div class="p-3 bg-light d-flex justify-content-between align-items-center ">
+                                                              <h6>Dashboard View</h6>
+                                                      </div>
+                                                      <div class="widget-content multistep-form" data-select2-id="12">
+                                                        <fieldset id="first" data-select2-id="first">
+                                                          <div class="add-course-info" data-select2-id="11">
+                                                          
+                                                            <div class=" p-4" data-select2-id="10">
+                                                              
+                                                                  <form action="#" data-select2-id="9">
+                                                                  @foreach($permissions as $permission)
+                                                                      <div class="row">
+                                                                      <div class="form-group mb-0 d-flex justify-content-between">
+                                                                        <label class="add-course-label">{{$permission->name}}</label>
+                                                                        <input class="form-check-input position-relative border-primary" type="checkbox" name="remember" id="remember">
+                                                                       
+                                                                      </div>
+                                                                      </div>
+                                                                      @endforeach
+                                                                  </form></div>
+                                          
+                                                              </div>
+                                          
+                                                                      
+                                                              
+                                                            </fieldset></div>
+                                                          
+                                                          </div>
+                                                        
+                                                      
+                                                      </div>
+                                            </div>
+                                            <!-- <div class="col-md-4">
                                                 <div class="card" data-select2-id="14">
                                                     <div class="widget-set" data-select2-id="13">
                                                       <div class="p-3 bg-light d-flex justify-content-between align-items-center ">
@@ -148,48 +182,7 @@
                                                         
                                                       
                                                       </div>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <div class="card" data-select2-id="14">
-                                                    <div class="widget-set" data-select2-id="13">
-                                                      <div class="p-3 bg-light d-flex justify-content-between align-items-center ">
-                                                              <h6>Dashboard View</h6>
-                                                      </div>
-                                                      <div class="widget-content multistep-form" data-select2-id="12">
-                                                        <fieldset id="first" data-select2-id="first">
-                                                          <div class="add-course-info" data-select2-id="11">
-                                                          
-                                                            <div class=" p-4" data-select2-id="10">
-                                                              
-                                                                  <form action="#" data-select2-id="9">
-                                                                    
-                                                                      <div class="row">
-                                                                      <div class="form-group mb-0 d-flex justify-content-between">
-                                                                        <label class="add-course-label">Account Summery</label>
-                                                                        <input class="form-check-input position-relative border-primary" type="checkbox" name="remember" id="remember">
-                                                                      </div>
-                                                                      <div class="form-group mb-0 d-flex justify-content-between">
-                                                                        <label class="add-course-label">Account Summery</label>
-                                                                        <input class="form-check-input position-relative border-primary" type="checkbox" name="remember" id="remember">
-                                                                      </div>
-                                                                      <div class="form-group mb-0 d-flex justify-content-between">
-                                                                        <label class="add-course-label">Account Summery</label>
-                                                                        <input class="form-check-input position-relative border-primary" type="checkbox" name="remember" id="remember">
-                                                                      </div>
-                                                                            </div>
-                                                                          </form></div>
-                                          
-                                                              </div>
-                                          
-                                                                      
-                                                              
-                                                            </fieldset></div>
-                                                          
-                                                          </div>
-                                                        
-                                                      
-                                                      </div>
-                                            </div>
+                                            </div> -->
 
 
 

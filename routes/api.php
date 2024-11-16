@@ -3,6 +3,7 @@
 use App\Http\Controllers\API\CommonApiController;
 use App\Http\Controllers\API\CourseController;
 use App\Http\Controllers\API\ServiceApiController;
+use App\Http\Controllers\API\ModuleApiController;
 use App\Http\Controllers\Auth\UserAuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -55,4 +56,17 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     Route::get('/services', [ServiceApiController::class, 'getServices']);
     Route::get('/service-details/{id}', [ServiceApiController::class, 'servicesDetails']);
+
+    //modules
+    Route::get('exam-module',[ModuleApiController::class,'get_module']);
+
+    //questions
+    Route::get('questions',[ModuleApiController::class,'get_questions']);
+    
+    //exams
+    Route::get('exam-details',[ModuleApiController::class,'get_exam_details']);
+    
+    //exam results
+    Route::post('results',[ModuleApiController::class,'get_exam_results']);
+
 });

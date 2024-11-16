@@ -14,10 +14,13 @@ class CommonApiController extends Controller
 {
     public function profile()
     {
-        $profile = auth()->user()->student;
+        // $profile = auth()->user()->student;
+        $profile = auth()->user()->student()->with(['courses','batches'])->first();
         $profile->image = asset('images/student/' . $profile->image);
-
-        return $this->responseWithSuccess('Profile fetched successfully', auth()->user());
+        return $this->responseWithSuccess('Profile fetched successfully', [
+            'user' => auth()->user(),
+            'profile' => $profile,
+        ]);
     }
 
 

@@ -9,6 +9,7 @@ use App\Models\Student;
 use App\Models\StudentPurchasedCourse;
 use App\Models\StudentWishlistedCourse;
 use App\Models\User;
+use App\Models\Batch;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -34,8 +35,10 @@ class StudentController extends Controller
      */
     public function create()
     {
+        $batches = Batch::where('status', 1)->get();
+        $courses = Course::where('status', 1)->get();
         $countries = Country::get();
-        return view('admin.pages.students.create', compact('countries'));
+        return view('admin.pages.students.create', compact('countries','courses','batches'));
     }
 
     /**
@@ -77,6 +80,9 @@ class StudentController extends Controller
             $request->image->move(public_path('/images/student'), $imageName);
             $student->image = $imageName;
         }
+        $student->reg_no = $request->register_no; 
+        $student->course_id = $request->course; 
+        $student->batch_id = $request->batch;
         $student->save();
 
         return redirect()->route('admin.student.index')->with('success', 'Student added successfully');
@@ -108,9 +114,11 @@ class StudentController extends Controller
     {
         $student = Student::find($id);
         $countries = Country::get();
+        $batches = Batch::where('status', 1)->get();
+        $courses = Course::where('status', 1)->get();
         $purchasedCousers = StudentPurchasedCourse::where('student_id', $id)->get();
         $wishlistedCousers = StudentWishlistedCourse::where('student_id', $id)->get();
-        return view('admin.pages.students.edit', compact('student', 'purchasedCousers', 'wishlistedCousers', 'countries'));
+        return view('admin.pages.students.edit', compact('student', 'purchasedCousers', 'wishlistedCousers', 'countries','batches','courses'));
     }
 
     /**
@@ -143,6 +151,9 @@ class StudentController extends Controller
             $request->image->move(public_path('/images/student'), $imageName);
             $student->image = $imageName;
         }
+        $student->reg_no = $request->register_no; 
+        $student->course_id = $request->course; 
+        $student->batch_id = $request->batch;
         $student->save();
 
         $user = User::find($student->user_id);

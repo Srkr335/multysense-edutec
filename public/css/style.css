@@ -17046,6 +17046,9 @@ margin-bottom: 7px;
 	background: #fff;
 	border-radius: 10px;
 	padding: 15px;
+    max-height: 80vh;
+    overflow-y: auto;     /* Enable vertical scrolling */
+    
 }
 .settings-menu h3 {
 	font-size: 18px;

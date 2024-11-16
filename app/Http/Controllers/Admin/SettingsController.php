@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\Permission;
+
 
 class SettingsController extends Controller
 {
@@ -92,7 +94,8 @@ class SettingsController extends Controller
     }
     public function permissionscreate()
     {
-       return view('admin.pages.settings.permissionscreate');
+       $permissions = Permission::get();
+       return view('admin.pages.settings.permissionscreate',compact('permissions'));
     }
     public function permissionsedit()
     {

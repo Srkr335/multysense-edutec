@@ -52,6 +52,8 @@ class UserAuthController extends Controller
         }
 
         return response()->json([
+            'success' => true,
+            'message' => 'Login successful!',
             'token' => auth()->user()->createToken('API Token')->plainTextToken,
             'user' => auth()->user()
         ]);

@@ -113,6 +113,31 @@
                                                     </option>
                                                 </select>
                                             </div>
+                                            <div class="form-group col-md-6">
+                                                <label class="add-course-label">Centre Name<span
+                                                class="text-danger">*</span></label>
+                                                <select class="form-control select" name="centre_name">
+                                                    <option value="">Select Centre</option>
+                                                    @foreach ($centres as $centre)
+                                                        <option value="{{ $centre->id }}">{{ $centre->name }}</option>
+                                                    @endforeach
+                                                </select>
+                                                
+                                            </div>
+                                            <div class="form-group col-md-6">
+                                                <label class="add-course-label">Duration <span
+                                                        class="text-danger">*</span></label>
+                                                <select class="form-control select" name="duration">
+                                                    <option value="">Select</option>
+                                                    <option value="1">1 Year</option>
+                                                    <option value="2">6 Month</option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group col-md-6">
+                                                <label class="add-course-label">Module Count</label>
+                                                <input type="text" class="form-control" placeholder="Module Count"
+                                                    name="module_count" value="" />
+                                            </div>
 
                                             <div class="form-group col-md-6">
                                                 <label class="add-course-label">Class Count <span

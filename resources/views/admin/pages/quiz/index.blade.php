@@ -12,10 +12,13 @@
 
                             <div class="settings-inner-blk p-0">
                                 <div class="sell-course-head comman-space d-flex justify-content-between align-items-center">
-                                    <h3>Quizes</h3>
+                                    <h3>Questions</h3>
                                     <div class="go-dashboard text-center">
+                                    <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#exampleModal">
+                                        <i class="fas fa-upload"></i> Import
+                                    </button>
                                         <a href="{{ route('admin.quiz.create') }}" class="btn btn-primary">Create New
-                                            Quiz</a>
+                                            Questions</a>
                                     </div>
                                 </div>
                                 <div class="card">
@@ -41,7 +44,7 @@
                                                             <td>{{ $n }}</td>
 
                                                             <td>{{ $quiz->course_id ? $quiz->course->title : '' }}</td>
-                                                            <td>{{ $quiz->question }}</td>
+                                                            <td>{{ Str::limit($quiz->question, 50) }}</td>
                                                             <td>
                                                                 @if ($quiz->status == 1)
                                                                     <span class="badge info-low">Enabled</span>
@@ -84,4 +87,90 @@
 
         </div>
     </div>
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Import Exam Questions</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form action="{{ route('admin.exam.import') }}" method="post" enctype="multipart/form-data">
+        <input type="hidden" name="_token" value="{{ csrf_token() }}">
+        <div class="modal-body">
+           <div class="form-group">
+           <label class="add-course-label">Course <span
+           class="text-danger">*</span></label>
+            <select class="form-control select" name="course_id" required>
+                                                <option value="">Select a Course</option>
+                                                @foreach ($courses as $course)
+                                                    <option value="{{ $course->id }}">{{ $course->title }}</option>
+                                                @endforeach
+                                            </select>
+                                            @if ($errors->has('course_id'))
+                                                <span class="text-sm text-danger">
+                                                    {{ $errors->first('course_id') }}
+                                                </span>
+                                            @endif
+          </div>
+          <div class="form-group">
+                                                <label class="form-control-label">Batch<span
+                                                class="text-danger">*</span></label>
+                                                <select class="form-control select" name="batch_id" required>
+                                                <option value="">Select Batch</option>
+                                                @foreach ($batches as $batch)
+                                                    <option value="{{ $batch->id }}">{{ $batch->name }}</option>
+                                                @endforeach
+                                            </select>
+                                            @if ($errors->has('course_id'))
+                                                <span class="text-sm text-danger">
+                                                    {{ $errors->first('course_id') }}
+                                                </span>
+                                            @endif
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="form-control-label">Exam<span
+                                                class="text-danger">*</span></label>
+                                                <select class="form-control select" name="exam" required>
+                                                <option value="">Select Exam</option>
+                                                @foreach ($exams as $exam)
+                                                    <option value="{{ $exam->id }}">{{ $exam->exam_name }}</option>
+                                                @endforeach
+                                            </select>
+                                            @if ($errors->has('course_id'))
+                                                <span class="text-sm text-danger">
+                                                    {{ $errors->first('course_id') }}
+                                                </span>
+                                            @endif
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="form-control-label">Exam Module<span
+                                                class="text-danger">*</span></label>
+                                                <select class="form-control select" name="module_id" required>
+                                                <option value="">Select Module</option>
+                                                @foreach ($examModules as $module)
+                                                    <option value="{{ $module->id }}">{{ $module->modules_name }}</option>
+                                                @endforeach
+                                            </select>
+                                            @if ($errors->has('course_id'))
+                                                <span class="text-sm text-danger">
+                                                    {{ $errors->first('course_id') }}
+                                                </span>
+                                            @endif
+                                            </div>
+          <div class="form-group">
+            <label for="file">Upload File<span
+            class="text-danger">*</span></label>
+            <input type="file" name="file" class="form-control" id="file" required>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary">Upload</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
 @endsection

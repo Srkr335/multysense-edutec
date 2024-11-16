@@ -29,13 +29,18 @@
                     </a>
                 </li>
                 <li class="nav-item {{ request()->is('admin/course*') ? 'active' : '' }}">
+                    <a href="{{ route('centre.index') }}" class="nav-link">
+                        <i class="feather-book"></i>Centre
+                    </a>
+                </li>
+                <li class="nav-item {{ request()->is('admin/course*') ? 'active' : '' }}">
                     <a href="{{ route('admin.course.index') }}" class="nav-link">
                         <i class="feather-book"></i>Courses
                     </a>
                 </li>
                 <li class="nav-item ">
                     <a href="{{ route('admin.quiz.index') }}" class="nav-link">
-                        <i class="feather-bell"></i> Quiz
+                        <i class="feather-bell"></i> Exam Questions
                     </a>
                 </li>
                 <li class="nav-item  {{ request()->is('admin/student*') ? 'active' : '' }}">
@@ -43,7 +48,7 @@
                         <i class="feather-users"></i> Students
                     </a>
                 </li>
-                <li class="nav-item  {{ request()->is('admin/services*') ? 'active' : '' }}">
+                <!-- <li class="nav-item  {{ request()->is('admin/services*') ? 'active' : '' }}">
                     <a href="{{ route('admin.services.index') }}" class="nav-link">
                         <i class="feather-users"></i> Services
                     </a>
@@ -57,7 +62,7 @@
                     <a href="{{ route('admin.banner.index') }}" class="nav-link">
                         <i class="feather-book"></i>Banners
                     </a>
-                </li>
+                </li> -->
                 <li class="nav-item  {{ request()->is('admin/tutor*') ? 'active' : '' }}">
                     <a href="{{ route('admin.tutor.index') }}" class="nav-link">
                         <i class="ri-slideshow-line"></i>Tutor
@@ -68,7 +73,7 @@
                         <i class="ri-slideshow-line"></i>Payments
                     </a>
                 </li>
-                {{-- <li class="nav-item ">
+                <li class="nav-item ">
                     <a href="{{ url('/admin/payment') }}" class="nav-link">
                         <i class="ri-bank-card-line"></i> Payment
                     </a>
@@ -82,7 +87,27 @@
                     <a href="{{ url('/admin/settings') }}" class="nav-link">
                         <i class="ri-settings-4-line"></i> Settings
                     </a>
-                </li> --}}
+                </li> 
+                <li class="nav-item  {{ request()->is('admin/payment*') ? 'active' : '' }}">
+                    <a href="{{ route('batch.index') }}" class="nav-link">
+                        <i class="ri-slideshow-line"></i>Batch
+                    </a>
+                </li>
+                <li class="nav-item  {{ request()->is('admin/payment*') ? 'active' : '' }}">
+                    <a href="{{ route('exam.index') }}" class="nav-link">
+                        <i class="ri-slideshow-line"></i>Exam
+                    </a>
+                </li>
+                <li class="nav-item  {{ request()->is('admin/payment*') ? 'active' : '' }}">
+                    <a href="{{ route('modules.index') }}" class="nav-link">
+                        <i class="ri-slideshow-line"></i>Modules
+                    </a>
+                </li>
+                <li class="nav-item  {{ request()->is('admin/payment*') ? 'active' : '' }}">
+                    <a href="{{ route('exam_result.index') }}" class="nav-link">
+                        <i class="ri-slideshow-line"></i>Exam Result
+                    </a>
+                </li>
             </ul>
         </div>
     </div>

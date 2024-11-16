@@ -10,12 +10,12 @@
                 <div class="row align-items-center">
                     <div class="col-md-12">
                         <div class="add-course-header pb-0 mb-3">
-                            <h2>Edit Quiz</h2>
+                            <h2>Edit Questions</h2>
                             <div class="add-course-btns">
                                 <ul class="nav">
                                     <li>
                                         <a href="{{ route('admin.quiz.index') }}" class="btn btn-black">Back to
-                                            Quiz</a>
+                                        Questions</a>
                                     </li>
                                     <li>
                                         <button type="submit" class="btn btn-success-dark">Update</button>
@@ -51,6 +51,55 @@
                                             @endif
                                         </div>
                                         <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label class="form-control-label">Batch<span
+                                                class="text-danger">*</span></label>
+                                                <select class="form-control select" name="batch_id" required>
+                                                <option value="">Select Batch</option>
+                                                @foreach ($batches as $batch)
+                                                    <option value="{{ $batch->id }}" {{$quiz->batch_id == $batch->id ? 'selected' : ''}} >{{ $batch->name }}</option>
+                                                @endforeach
+                                            </select>
+                                            @if ($errors->has('course_id'))
+                                                <span class="text-sm text-danger">
+                                                    {{ $errors->first('course_id') }}
+                                                </span>
+                                            @endif
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label class="form-control-label">Exam<span
+                                                class="text-danger">*</span></label>
+                                                <select class="form-control select" name="exam" required>
+                                                <option value="">Select Exam</option>
+                                                @foreach ($exams as $exam)
+                                                    <option value="{{ $exam->id }}" {{$quiz->exam_id == $exam->id ? 'selected' : ''}}>{{ $exam->exam_name }}</option>
+                                                @endforeach
+                                            </select>
+                                            @if ($errors->has('course_id'))
+                                                <span class="text-sm text-danger">
+                                                    {{ $errors->first('course_id') }}
+                                                </span>
+                                            @endif
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label class="form-control-label">Exam Module<span
+                                                class="text-danger">*</span></label>
+                                                <select class="form-control select" name="module_id" required>
+                                                <option value="">Select Module</option>
+                                                @foreach ($examModules as $module)
+                                                    <option value="{{ $module->id }}" {{$quiz->module_id == $module->id ? 'selected' : ''}} >{{ $module->modules_name }}</option>
+                                                @endforeach
+                                            </select>
+                                            @if ($errors->has('course_id'))
+                                                <span class="text-sm text-danger">
+                                                    {{ $errors->first('course_id') }}
+                                                </span>
+                                            @endif
+                                            </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="form-group">
@@ -62,14 +111,14 @@
                                             <div class="form-group">
                                                 <label class="form-control-label">Answer</label>
                                                 <select name="answer" id="answer" class="form-select">
-                                                    <option value="option_a"
-                                                        @if ($quiz->answer == 'option_a') selected @endif>Option A</option>
-                                                    <option value="option_b"
-                                                        @if ($quiz->answer == 'option_b') selected @endif>Option B</option>
-                                                    <option value="option_c"
-                                                        @if ($quiz->answer == 'option_c') selected @endif>Option C</option>
-                                                    <option value="option_d"
-                                                        @if ($quiz->answer == 'option_d') selected @endif>Option D</option>
+                                                    <option value="A"
+                                                        @if ($quiz->answer == 'A') selected @endif>Option A</option>
+                                                    <option value="B"
+                                                        @if ($quiz->answer == 'B') selected @endif>Option B</option>
+                                                    <option value="C"
+                                                        @if ($quiz->answer == 'C') selected @endif>Option C</option>
+                                                    <option value="D"
+                                                        @if ($quiz->answer == 'D') selected @endif>Option D</option>
                                                 </select>
                                             </div>
                                         </div>

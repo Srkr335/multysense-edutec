@@ -28,6 +28,7 @@
                                                     <th>Sl.No</th>
                                                     <th>Image</th>
                                                     <th>Title</th>
+                                                    <th>Duration</th>
                                                     <th>Level</th>
                                                     <th>Category</th>
                                                     <th>Status</th>
@@ -91,6 +92,10 @@
                         {
                             data: 'title',
                             name: 'title'
+                        },
+                        {
+                            data: 'duration',
+                            name: 'duration'
                         },
                         {
                             data: 'level',

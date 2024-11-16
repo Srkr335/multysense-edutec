@@ -10,6 +10,7 @@ use App\Models\CoursePricing;
 use App\Models\CourseStudyMaterial;
 use App\Models\CourseTag;
 use App\Models\CourseTutor;
+use App\Models\Centre;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\DataTables;
@@ -44,6 +45,9 @@ class CourseController extends Controller
                         return '<img src="' . asset('img/no_image.png') . '" class="img-fluid " alt="" width="60px">';
                     }
                 })
+                ->addColumn('duration', function ($row) {
+                    return ucfirst($row->duration == 1 ? '1 Year' : '6 Month');
+                })
                 ->addColumn('level', function ($row) {
                     return ucfirst($row->level);
                 })
@@ -69,7 +73,8 @@ class CourseController extends Controller
     public function create()
     {
         $categories = Category::get();
-        return view('admin.pages.course.create', compact('categories'));
+        $centres = Centre::where('status',1)->get();
+        return view('admin.pages.course.create', compact('categories','centres'));
     }
 
     /**
@@ -87,6 +92,8 @@ class CourseController extends Controller
             'level'        => 'required',
             'class_count'        => 'required',
             'quiz_count'        => 'required',
+            'centre_name'     => 'required',
+            'duration'     => 'required',
             // 'main_image'        => 'required',
             // 'main_video_link' => 'required',
         ]);
@@ -104,6 +111,9 @@ class CourseController extends Controller
         $course->is_newly_added = $request->is_newly_added;
         $course->is_free = $request->is_free;
         $course->status = $request->status;
+        $course->centre_id = $request->centre_name;
+        $course->duration = $request->duration;
+        $course->module_count = $request->module_count;
         $course->save();
 
         $coursePLaylist = new CoursePlaylist();
@@ -179,8 +189,9 @@ class CourseController extends Controller
     {
         $categories = Category::get();
         $course = Course::find($id);
+        $centres = Centre::where('status',1)->get();
 
-        return view('admin.pages.course.edit', compact('categories', 'course'));
+        return view('admin.pages.course.edit', compact('categories', 'course','centres'));
     }
 
     /**
@@ -199,6 +210,8 @@ class CourseController extends Controller
             'level'        => 'required',
             'class_count'        => 'required',
             'quiz_count'        => 'required',
+            'centre_name'     => 'required',
+            'duration'     => 'required',
         ]);
 
         $course = Course::find($id);
@@ -215,6 +228,9 @@ class CourseController extends Controller
         $course->is_newly_added = $request->is_newly_added;
         $course->is_free = $request->is_free;
         $course->status = $request->status;
+        $course->centre_id = $request->centre_name;
+        $course->duration = $request->duration;
+        $course->module_count = $request->module_count;
         $course->save();
 
         $coursePLaylist = CoursePlaylist::where('course_id', $id)->first();

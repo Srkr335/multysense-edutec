@@ -117,6 +117,31 @@
                                                 </select>
                                             </div>
                                             <div class="form-group col-md-6">
+                                                <label class="add-course-label">Centre Name<span
+                                                class="text-danger">*</span></label>
+                                                <select class="form-control select" name="centre_name">
+                                                    <option value="">Select Centre</option>
+                                                    @foreach ($centres as $centre)
+                                                        <option value="{{ $centre->id }}"{{$course->centre_id == $centre->id ? 'selected' : ''}}>{{ $centre->name }}</option>
+                                                    @endforeach
+                                                </select>
+                                                
+                                            </div>
+                                            <div class="form-group col-md-6">
+                                                <label class="add-course-label">Duration <span
+                                                        class="text-danger">*</span></label>
+                                                <select class="form-control select" name="duration">
+                                                    <option value="">Select</option>
+                                                    <option value="1" {{$course->duration == 1 ? 'selected' : ''}}>1 Year</option>
+                                                    <option value="2" {{$course->duration == 2 ? 'selected' : ''}}>6 Month</option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group col-md-6">
+                                                <label class="add-course-label">Module Count</label>
+                                                <input type="text" class="form-control" placeholder="Module Count"
+                                                    name="module_count" value="{{ $course->module_count }}" />
+                                            </div>
+                                            <div class="form-group col-md-6">
                                                 <label class="add-course-label">Class Count <span
                                                         class="text-danger">*</span></label>
                                                 <input type="text" class="form-control" placeholder="Class Count"

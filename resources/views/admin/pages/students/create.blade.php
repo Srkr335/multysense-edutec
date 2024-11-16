@@ -93,6 +93,13 @@
                                 <div class="row">
                                     <div class="col-lg-6">
                                         <div class="form-group">
+                                            <label class="form-control-label">Register No</label>
+                                            <input type="text" class="form-control" placeholder="Enter register no"
+                                                name="register_no" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
                                             <label class="form-control-label">Name</label>
                                             <input type="text" class="form-control" placeholder="Enter Name"
                                                 name="name" required>
@@ -107,6 +114,27 @@
                                     </div> --}}
                                     <div class="col-lg-6">
                                         <div class="form-group">
+                                            <label class="form-control-label">Course</label>
+                                            <select class="form-control" name="course" id="course">
+                                                <option value="">Select Course</option>
+                                                @foreach($courses as $course)
+                                                <option value="{{ $course->id }}">{{ $course->title }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div><div class="col-lg-6">
+                                        <div class="form-group">
+                                            <label class="form-control-label">Batch</label>
+                                            <select class="form-control" name="batch" id="batch">
+                                                <option value="">Select Batch</option>
+                                                @foreach($batches as $batch)
+                                                <option value="{{ $batch->id }}">{{ $batch->name }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
                                             <label class="form-control-label">Phone</label>
                                             <input type="text" class="form-control" placeholder="Enter your Phone"
                                                 name="phone">
@@ -117,6 +145,12 @@
                                             <label class="form-control-label">Email</label>
                                             <input type="text" class="form-control" placeholder="Enter your Email"
                                                 name="email" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <label class="form-control-label">Upload Image</label>
+                                            <input type="file" class="form-control" name="image" >
                                         </div>
                                     </div>
                                     <div class="col-lg-6">
