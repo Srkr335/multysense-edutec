@@ -51,6 +51,21 @@
               </div>
             </div>
           </div>
+          <div class="col-lg-4 col-md-6 ">
+            <div class="settings-cards course-full-width">
+              <div class=" w-100 aos aos-init aos-animate" data-aos="fade-up">
+                <div class="online-course d-flex align-items-center">
+                  <div class="course-img w-25">
+                    <img src="{{asset('img/img/settings.png')}}" class="w-100" alt="">
+                  </div>
+                  <div class="course-inner-content">
+                    <h4>User</h4>
+                    <a href="{{route('settings.user')}}" class="d-flex align-items-center">  User Settings <i class="ri-arrow-right-line ml-2 mt-1"></i></a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         
         </div>
       </div>

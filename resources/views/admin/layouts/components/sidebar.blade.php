@@ -33,9 +33,16 @@
                         <i class="feather-book"></i>Centre
                     </a>
                 </li>
+                @can('courses_list')
                 <li class="nav-item {{ request()->is('admin/course*') ? 'active' : '' }}">
                     <a href="{{ route('admin.course.index') }}" class="nav-link">
                         <i class="feather-book"></i>Courses
+                    </a>
+                </li>
+                @endcan
+                <li class="nav-item {{ request()->is('admin/course*') ? 'active' : '' }}">
+                    <a href="{{ route('scheme.index') }}" class="nav-link">
+                        <i class="feather-book"></i>Scheme
                     </a>
                 </li>
                 <li class="nav-item ">
@@ -52,7 +59,7 @@
                     <a href="{{ route('admin.services.index') }}" class="nav-link">
                         <i class="feather-users"></i> Services
                     </a>
-                </li>
+                </li> -->
                 <li class="nav-item  {{ request()->is('admin/category*') ? 'active' : '' }}">
                     <a href="{{ route('admin.category.index') }}" class="nav-link">
                         <i class="ri-file-list-3-line"></i>Category
@@ -62,7 +69,7 @@
                     <a href="{{ route('admin.banner.index') }}" class="nav-link">
                         <i class="feather-book"></i>Banners
                     </a>
-                </li> -->
+                </li>
                 <li class="nav-item  {{ request()->is('admin/tutor*') ? 'active' : '' }}">
                     <a href="{{ route('admin.tutor.index') }}" class="nav-link">
                         <i class="ri-slideshow-line"></i>Tutor

@@ -4,7 +4,10 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Permission;
+use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
+use App\Models\User;
+use Yajra\DataTables\DataTables;
 
 
 class SettingsController extends Controller
@@ -90,11 +93,12 @@ class SettingsController extends Controller
     }
     public function permissions()
     {
-       return view('admin.pages.settings.permissions');
+       $roles = Role::orderBy('id', 'DESC')->paginate(5);
+       return view('admin.pages.settings.permissions',compact('roles'));
     }
     public function permissionscreate()
     {
-       $permissions = Permission::get();
+        $permissions = Permission::select('id', 'section', 'name')->get()->groupBy('section');
        return view('admin.pages.settings.permissionscreate',compact('permissions'));
     }
     public function permissionsedit()
@@ -104,5 +108,32 @@ class SettingsController extends Controller
     public function payments()
     {
        return view('admin.pages.settings.payments');
+    }
+    public function user_view(Request $request)
+    {
+        return view('admin.pages.settings.user.index');
+    }
+    public function getusers(Request $request)
+    {
+        if ($request->ajax()) {
+            $data = User::orderBy('id', 'desc')
+                ->select('*');
+            return DataTables::of($data)
+                ->addIndexColumn()
+                ->editColumn('name', function ($row) {
+                    return ucfirst($row->name);
+                })
+                ->addColumn('email', function ($row) {
+                    return ($row->email);
+                })
+                ->addColumn('type', function ($row) {
+                    return ucfirst($row->type);
+                })
+                ->addColumn('action', function ($row) {
+                    return '<a href="' .   route("admin.settings.editUser", $row->id) . '" class="edit btn btn-primary btn-sm">Edit</a> <a href="' .   route("admin.settings.deleteUser", $row->id) . '"><button class="delete btn btn-danger btn-sm" data-id="' . $row->id . '">Delete</button></a>';
+                })
+                ->rawColumns(['name', 'email', 'type','action'])
+                ->make(true);
+        }
     }
 }

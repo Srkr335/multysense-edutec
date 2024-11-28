@@ -37,44 +37,26 @@
                         </tr>
                     </thead>
                     <tbody>
+                        @foreach($roles as $role)
                         <tr>
-                           
-                            <td>1</td>
-                            <td>Devoloper</td>
+                            <td>{{ $loop->iteration }}</td>
+                            <td>{{ $role->name}}</td>
                             <td>
-                                <div class="actionBtn">
-                                    <span class="more">
-                                        <button type="button" onclick="showDropdown()"> <i
-                                                class="feather-more-vertical" id="showDropdown"></i></button>
-                                    </span>
-                                    <ul class="more-details hidden" id="more-details">
-                                        <li> <a href="{{route('settings.permissions.edit')}}">Edit</a></li>
-                                        <li> <a href="">Delete</a></li>
-                                    </ul>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
                            
-                            <td>1</td>
-                            <td>Devoloper</td>
-                            <td>
-                                <div class="actionBtn">
-                                    <span class="more">
-                                        <button type="button" onclick="showDropdown()"> <i
-                                                class="feather-more-vertical" id="showDropdown"></i></button>
-                                    </span>
-                                    <ul class="more-details hidden" id="more-details">
-                                        <li> <a href="">Top Rated</a></li>
-                                        <li> <a href="">Trending</a></li>
-                                        <li> <a href="">Most Purchased</a></li>
-                                        <li> <a href="">Newly Added</a></li>
-                                        <li> <a href="">Free</a></li>
-                                        <li> <a href="">Handpicked</a></li>
-                                    </ul>
-                                </div>
-                            </td>
+                                <a href="{{ route('admin.settings.roles_edit',['id' => $role->id]) }}"
+                                class="btn btn-info text-white">
+                                <span class="glyphicon glyphicon-edit"></span> Edit
+                                </a>
+                               
+                               
+                                <a href="{{ route('admin.settings.roles_delete',['id' => $role->id]) }}"
+                                class="btn btn-danger text-white">
+                                <span class="glyphicon glyphicon-trash"></span> Delete
+                                </a>
+                               
+                                </td>
                         </tr>
+                        @endforeach
                        
                     </tbody>
                 </table>

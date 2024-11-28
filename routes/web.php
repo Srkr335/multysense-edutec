@@ -17,6 +17,8 @@ use App\Http\Controllers\Admin\CentreController;
 use App\Http\Controllers\Admin\ExamController;
 use App\Http\Controllers\Admin\ModulesController;
 use App\Http\Controllers\Admin\ResultController;
+use App\Http\Controllers\Admin\RolesController;
+use App\Http\Controllers\Admin\SchemeController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserCourseViewController;
 use App\Http\Controllers\userinstructorController;
@@ -112,6 +114,9 @@ Route::middleware(['auth', 'user-access:admin'])->group(function () {
         Route::get('/settings/permissioncreate', [SettingsController::class, 'permissionscreate'])->name('settings.permissions.create');
         Route::get('/settings/permissionedit', [SettingsController::class, 'permissionsedit'])->name('settings.permissions.edit');
         Route::get('/settings/payments', [SettingsController::class, 'payments'])->name('settings.payments');
+        Route::get('/settings/user', [SettingsController::class, 'user_view'])->name('settings.user');
+        Route::get('/get-users', [SettingsController::class, 'getusers'])->name('settings.getuser');
+        
 
         // category
         Route::get('/banner', [BannerController::class, 'index'])->name('admin.banner.index');
@@ -153,6 +158,26 @@ Route::middleware(['auth', 'user-access:admin'])->group(function () {
          Route::resource('exam_result',ResultController::class);
         //  Route::post('modules/update',[ModulesController::class, 'update'])->name('admin.modules.update');
         //  Route::post('modules/delete',[ModulesController::class, 'destroy'])->name('admin.modules.delete');
+
+         //roles 
+         Route::post('/settings/roles-store', [RolesController::class, 'store'])->name('admin.settings.roles_store');
+         Route::get('/settings/roles-edit/{id}', [RolesController::class, 'edit'])->name('admin.settings.roles_edit');
+         Route::post('/settings/roles-update', [RolesController::class, 'update'])->name('admin.settings.roles_update');
+         Route::get('/settings/roles-destroy/{id}', [RolesController::class, 'destroy'])->name('admin.settings.roles_delete');
+
+         //user
+         Route::get('/settings/user-create', [RolesController::class, 'user_create'])->name('admin.settings.create_user');
+         Route::post('/settings/store_user', [RolesController::class, 'store_user'])->name('admin.settings.store_user');
+         Route::get('/settings/editUser/{id}', [RolesController::class, 'editUser'])->name('admin.settings.editUser');
+         Route::post('/settings/update-user', [RolesController::class, 'update_user'])->name('admin.settings.update_user');
+         Route::get('/settings/delete-user/{id}', [RolesController::class, 'destroy_user'])->name('admin.settings.deleteUser');
+
+         //scheme  
+         Route::resource('scheme',SchemeController::class);
+         Route::post('/scheme/update', [SchemeController::class, 'update'])->name('admin.scheme.update');
+         Route::post('/scheme/destroy', [SchemeController::class, 'destroy'])->name('admin.scheme.delete');
+        
+
     });
 });
 
