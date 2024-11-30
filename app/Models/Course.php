@@ -18,4 +18,9 @@ class Course extends Model
     {
         return $this->belongsTo(Category::class, 'category_id', 'id');
     }
+
+    public function centre()
+    {
+        return $this->belongsTo(Centre::class, 'centre_id', 'id');
+    }
 }

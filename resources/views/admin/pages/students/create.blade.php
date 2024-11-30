@@ -140,22 +140,24 @@
                                             <label class="form-control-label">Course</label>
                                             <select class="form-control" name="course" id="course_id">
                                                 <option value="">Select Course</option>
-                                                <!-- @foreach($courses as $course)
-                                                <option value="{{ $course->id }}">{{ $course->title }}</option>
-                                                @endforeach -->
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <label class="form-control-label">Centre</label>
+                                            <select class="form-control" name="centre" id="centre_id">
+                                                <option value="">Select Centre</option>
                                             </select>
                                         </div>
                                     </div>
                                     
-                                    
                                     <div class="col-lg-6">
                                         <div class="form-group">
                                             <label class="form-control-label">Batch</label>
-                                            <select class="form-control" name="batch" id="batch">
+                                            <select class="form-control" name="batch" id="batch_id">
                                                 <option value="">Select Batch</option>
-                                                @foreach($batches as $batch)
-                                                <option value="{{ $batch->id }}">{{ $batch->name }}</option>
-                                                @endforeach
                                             </select>
                                         </div>
                                     </div>
@@ -268,6 +270,12 @@
    $('#category_id').change(function () {
     getCourse();
 });
+   $('#course_id').change(function () {
+    getCentre();
+});
+   $('#centre_id').change(function () {
+    getBatch();
+});
 
 function getCategory() {
     var schemeId = $('#scheme_id').val();
@@ -330,6 +338,86 @@ function getCourse() {
             console.error(err);
         }
     });
+}
+
+function getCentre() {
+    var role = {!! auth()->user()->roles[0]->id !!};
+   
+    var courseId = $('#course_id').val();
+    if (!courseId) {
+        // Clear the categories dropdown if no scheme is selected
+        $('#centre_id').html('<option value="">Choose Course</option>');
+        return;
+    }
+
+    $.ajax({
+        url: "{{ route('admin.student.select_centre') }}",
+        method: "get",
+        headers: {
+            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+        },
+        data: {
+            course_id: courseId,
+        },
+        success: function (res) {
+            console.log(res);
+            if(role == 2)
+           {
+            var options = '';
+
+            res.forEach(function (data) {
+                var centreId = {!! auth()->user()->centre ? auth()->user()->centre->id :0 !!};
+                if(centreId ==  data.centre.id)
+                    {
+                        options += '<option value="' + data.centre.id + '">' + data.centre.name + '</option>';
+                    }
+                
+            });
+           }else{
+            var options = '<option value="">-- Select --</option>';
+
+            res.forEach(function (data) {
+                options += '<option value="' + data.centre.id + '">' + data.centre.name + '</option>';
+            });
+           }
+            $('#centre_id').html(options);
+        },
+        error: function (err) {
+            console.error(err);
+        }
+    });   
+}
+
+function getBatch() {
+    var centreId = $('#centre_id').val();
+
+    if (!centreId) {
+        // Clear the categories dropdown if no scheme is selected
+        $('#batch_id').html('<option value="">Choose Course</option>');
+        return;
+    }
+
+    $.ajax({
+        url: "{{ route('admin.student.select_batch') }}",
+        method: "get",
+        headers: {
+            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+        },
+        data: {
+            centre_id: centreId,
+        },
+        success: function (res) {
+            console.log(res);
+            var options = '<option value="">-- Select --</option>';
+            res.forEach(function (data) {
+                options += '<option value="' + data.id + '">' + data.name + '</option>';
+            });
+            $('#batch_id').html(options);
+        },
+        error: function (err) {
+            console.error(err);
+        }
+    });   
 }
 
 

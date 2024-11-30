@@ -43,7 +43,7 @@
                                 </div>
                                 <div class="user-text">
                                     <h6>{{ auth()->user()->name }}</h6>
-                                    <p class="text-muted mb-0">Instructor</p>
+                                    <p class="text-muted mb-0">{{auth()->user()->roles[0]->name}}</p>
                                 </div>
                             </div>
                             <a class="dropdown-item" href="{{ route('admin.home') }}"><i class="feather-home me-1"></i>

@@ -70,6 +70,8 @@ Route::middleware(['auth', 'user-access:admin'])->group(function () {
         Route::post('/students/remove/wishlist-course', [StudentController::class, 'removeWishlistCourse'])->name('admin.student.remove.wishlist.course');
         Route::get('/students/getcategory', [StudentController::class, 'getCategory'])->name('admin.student.select_category');
         Route::get('/students/getcourse', [StudentController::class, 'getCourse'])->name('admin.student.select_course');
+        Route::get('/students/getcentre', [StudentController::class, 'getCentre'])->name('admin.student.select_centre');
+        Route::get('/students/getbatch', [StudentController::class, 'getBatch'])->name('admin.student.select_batch');
 
         // category
         Route::get('/category', [CategoryController::class, 'index'])->name('admin.category.index');

@@ -12,6 +12,7 @@ use App\Models\User;
 use App\Models\Batch;
 use App\Models\Scheme;
 use App\Models\Category;
+use App\Models\Centre;
 use App\Models\SchemeCategoryCourse;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -27,7 +28,15 @@ class StudentController extends Controller
      */
     public function index()
     {
-        $students = Student::orderBy('id', 'desc')->get();
+        $rollId = auth()->user()->roles[0]->id;
+        if($rollId == 2)  // role centre
+        {
+            $students = Student::where('centre_id',auth()->user()->centre->id)->orderBy('id', 'desc')->paginate(5);
+        }
+        else
+        {
+            $students = Student::orderBy('id', 'desc')->paginate(5);
+        }
         return view('admin.pages.students.index', compact('students'));
     }
 
@@ -90,6 +99,7 @@ class StudentController extends Controller
         $student->batch_id = $request->batch;
         $student->scheme_id = $request->scheme;
         $student->category_id = $request->category;
+        $student->centre_id = $request->centre;
         $student->save();
 
         return redirect()->route('admin.student.index')->with('success', 'Student added successfully');
@@ -233,5 +243,24 @@ class StudentController extends Controller
         ->get();
 
     return $cate;
+    }
+    public function getCentre(Request $request)
+    {
+        $courseId = $request->course_id;
+
+        $course = Course::with('centre')  // Eager load 'category' with id and name columns
+        ->where('id', $courseId)
+        ->get();
+
+    return $course;
+    }
+    public function getBatch(Request $request)
+    {
+        $centreId = $request->centre_id;
+        
+        $batch = Batch::where('centre_id', $centreId)
+        ->get();
+
+    return $batch;
     }
 }

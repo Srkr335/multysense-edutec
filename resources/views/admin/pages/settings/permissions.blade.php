@@ -48,11 +48,12 @@
                                 <span class="glyphicon glyphicon-edit"></span> Edit
                                 </a>
                                
-                               
-                                <a href="{{ route('admin.settings.roles_delete',['id' => $role->id]) }}"
+                               @if($role->id !=1 && $role->id !=2)
+                               <a href="{{ route('admin.settings.roles_delete',['id' => $role->id]) }}"
                                 class="btn btn-danger text-white">
                                 <span class="glyphicon glyphicon-trash"></span> Delete
                                 </a>
+                               @endif
                                
                                 </td>
                         </tr>
