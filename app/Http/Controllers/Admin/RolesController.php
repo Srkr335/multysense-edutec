@@ -155,31 +155,31 @@ class RolesController extends Controller
     }
     public function store_user(Request $request)
     {
-        // $user = new User();
-        // $user->name = $request->username;
-        // $user->email = $request->email;
-        // $user->password = bcrypt($request->password); // Hash the password
-        // $user->mobile_no = $request->mobile;
-        // $user->type = auth()->user()->id;
-        // $user->save();
-        // $user->assignRole($request->role);
+        $user = new User();
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->password =Hash::make($request->password); 
+        $user->mobile_no = $request->mobile;
+        $user->type = 1;
+        $user->save();
+        $user->assignRole($request->role);
 
-        // return redirect()->route('settings.user')
-        //     ->with('success', 'User created successfully');
-        $input = $request->all();
+        return redirect()->route('settings.user')
+            ->with('success', 'User created successfully');
+        // $input = $request->all();
 
-        $input['password'] = Hash::make($input['password']);
+        // $input['password'] = Hash::make($input['password']);
 
 
-        $user = User::create($input);
+        // $user = User::create($input);
 
-        $user->assignRole($request->input('role'));
+        // $user->assignRole($request->input('role'));
 
     
 
-        return redirect()->route('settings.user')
+        // return redirect()->route('settings.user')
 
-                        ->with('success','User created successfully');
+        //                 ->with('success','User created successfully');
     }
     public function editUser($id)
     {

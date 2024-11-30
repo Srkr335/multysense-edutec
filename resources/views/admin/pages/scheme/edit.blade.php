@@ -128,7 +128,7 @@
                                             <select class="form-control" name="category" id="category" onchange="filterCourses()">
                                                 <option value="0">Select</option>
                                                 @foreach($categories as $category)
-                                                <option value="{{ $category->id }}"{{$editScheme->category_id == $category->id ? 'selected' : ''}}>{{ $category->name }}</option>
+                                                <option value="{{ $category->id }}"{{$editScheme->categories[0]->cat_id == $category->id ? 'selected' : ''}}>{{ $category->name }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -136,10 +136,11 @@
                                     <div class="col-lg-6">
                                         <div class="form-group">
                                             <label class="form-control-label">Course</label>
-                                            <select class="form-control" name="course" id="course">
+                                            <select class="form-control multiple" name="course[]" id="course" multiple>
                                                 <option value="0">Select</option>
                                                 @foreach($courses as $course)
-                                                <option value="{{ $course->id }}"{{$editScheme->course_id == $course->id ? 'selected' : ''}}>{{ $course->title }}</option>
+                                                
+                                                <option value="{{ $course->id }}"{{in_array($course->id,$editScheme->courseIds()) ? 'selected' : ''}}>{{ $course->title }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -164,6 +165,8 @@
         </div>
     </div>
     <script>
+                $('.multiple').select2();
+
     const courses = @json($courses); // Pass courses from the backend as JSON.
 
     function filterCourses() {

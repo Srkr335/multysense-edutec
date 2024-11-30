@@ -1,4 +1,5 @@
 @extends('admin.layouts.admin_app')
+ <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 @section('content')
     <div class="container" style="transform: none;">
@@ -114,15 +115,40 @@
                                     </div> --}}
                                     <div class="col-lg-6">
                                         <div class="form-group">
-                                            <label class="form-control-label">Course</label>
-                                            <select class="form-control" name="course" id="course">
-                                                <option value="">Select Course</option>
-                                                @foreach($courses as $course)
-                                                <option value="{{ $course->id }}">{{ $course->title }}</option>
+                                            <label class="form-control-label">Scheme</label>
+                                            <select class="form-control" name="scheme" id="scheme_id">
+                                                <option value="">Select Scheme</option>
+                                                @foreach($schemes as $scheme)
+                                                <option value="{{ $scheme->id }}">{{ $scheme->name }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
-                                    </div><div class="col-lg-6">
+                                    </div>
+                                    
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <label class="form-control-label">Category</label>
+                                            <select name="category" id="category_id" class="form-control">
+                                                <option value="">Choose Category</option>
+                                            </select>
+
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <label class="form-control-label">Course</label>
+                                            <select class="form-control" name="course" id="course_id">
+                                                <option value="">Select Course</option>
+                                                <!-- @foreach($courses as $course)
+                                                <option value="{{ $course->id }}">{{ $course->title }}</option>
+                                                @endforeach -->
+                                            </select>
+                                        </div>
+                                    </div>
+                                    
+                                    
+                                    <div class="col-lg-6">
                                         <div class="form-group">
                                             <label class="form-control-label">Batch</label>
                                             <select class="form-control" name="batch" id="batch">
@@ -235,4 +261,79 @@
 
         </div>
     </div>
+    <script>
+   $('#scheme_id').change(function () {
+    getCategory();
+});
+   $('#category_id').change(function () {
+    getCourse();
+});
+
+function getCategory() {
+    var schemeId = $('#scheme_id').val();
+
+    if (!schemeId) {
+        // Clear the categories dropdown if no scheme is selected
+        $('#category_id').html('<option value="">Choose Category</option>');
+        return;
+    }
+
+    $.ajax({
+        url: "{{ route('admin.student.select_category') }}",
+        method: "get",
+        headers: {
+            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+        },
+        data: {
+            scheme_id: schemeId,
+        },
+        success: function (res) {
+            console.log(res);
+            var options = '<option value="">-- Select --</option>';
+            res.forEach(function (data) {
+                options += '<option value="' + data.category.id + '">' + data.category.name + '</option>';
+            });
+            $('#category_id').html(options);
+        },
+        error: function (err) {
+            console.error(err);
+        }
+    });
+}
+function getCourse() {
+    var catgoryId = $('#category_id').val();
+
+    if (!catgoryId) {
+        // Clear the categories dropdown if no scheme is selected
+        $('#course_id').html('<option value="">Choose Course</option>');
+        return;
+    }
+
+    $.ajax({
+        url: "{{ route('admin.student.select_course') }}",
+        method: "get",
+        headers: {
+            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+        },
+        data: {
+            cat_id: catgoryId,
+        },
+        success: function (res) {
+            console.log(res);
+            var options = '<option value="">-- Select --</option>';
+            res.forEach(function (data) {
+                options += '<option value="' + data.course.id + '">' + data.course.title + '</option>';
+            });
+            $('#course_id').html(options);
+        },
+        error: function (err) {
+            console.error(err);
+        }
+    });
+}
+
+
+</script>
+
+
 @endsection

@@ -19,10 +19,6 @@ class UserAccess
         // return $next($request);
         if(auth()->user()->type == $userType){
             return $next($request);
-        } 
-        else if(auth()->user()->type == 'user')
-        {
-            return $next($request);
         }
         return response()->json(['You do not have permission to access for this page.']);
         /* return response()->view('errors.check-permission'); */

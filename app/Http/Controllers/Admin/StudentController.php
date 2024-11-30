@@ -10,6 +10,9 @@ use App\Models\StudentPurchasedCourse;
 use App\Models\StudentWishlistedCourse;
 use App\Models\User;
 use App\Models\Batch;
+use App\Models\Scheme;
+use App\Models\Category;
+use App\Models\SchemeCategoryCourse;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -35,10 +38,12 @@ class StudentController extends Controller
      */
     public function create()
     {
+        $schemes = Scheme::where('status',1)->get();
+        $categories = Category::where('status',1)->get();
         $batches = Batch::where('status', 1)->get();
         $courses = Course::where('status', 1)->get();
         $countries = Country::get();
-        return view('admin.pages.students.create', compact('countries','courses','batches'));
+        return view('admin.pages.students.create', compact('countries','courses','batches','schemes','categories'));
     }
 
     /**
@@ -83,6 +88,8 @@ class StudentController extends Controller
         $student->reg_no = $request->register_no; 
         $student->course_id = $request->course; 
         $student->batch_id = $request->batch;
+        $student->scheme_id = $request->scheme;
+        $student->category_id = $request->category;
         $student->save();
 
         return redirect()->route('admin.student.index')->with('success', 'Student added successfully');
@@ -198,5 +205,33 @@ class StudentController extends Controller
     {
         StudentWishlistedCourse::where('student_id', $request->student_id)->where('course_id', $request->course_id)->delete();
         return redirect()->back()->with('success', 'Course removed from Wishlist');
+    }
+    public function getCategory(Request $request)
+    {
+        // $schemeId = $request->scheme_id;
+        // $categories = Scheme::with('category')
+        // ->where('id', $schemeId)
+        // ->get();
+
+        // return response()->json($categories);
+        $schemeId = $request->scheme_id;
+
+        $scheme = SchemeCategoryCourse::with('category')  // Eager load 'category' with id and name columns
+            ->where('scheme_id', $schemeId)
+            ->get()
+            ->unique('cat_id');
+
+        return $scheme;
+
+    }
+    public function getCourse(Request $request)
+    {
+        $catId = $request->cat_id;
+
+        $cate = SchemeCategoryCourse::with('course')  // Eager load 'category' with id and name columns
+        ->where('cat_id', $catId)
+        ->get();
+
+    return $cate;
     }
 }

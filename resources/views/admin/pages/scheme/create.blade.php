@@ -124,7 +124,7 @@
                                     <div class="col-lg-6">
                                         <div class="form-group">
                                             <label class="form-control-label">Category</label>
-                                            <select class="form-control" name="category" id="category" onchange="filterCourses()">
+                                            <select class="form-control " name="category" id="category" onchange="filterCourses()" >
                                                 <option value="0">Select</option>
                                                 @foreach($categories as $category)
                                                 <option value="{{ $category->id }}">{{ $category->name }}</option>
@@ -135,7 +135,7 @@
                                     <div class="col-lg-6">
                                         <div class="form-group">
                                             <label class="form-control-label">Course</label>
-                                            <select class="form-control" name="course" id="course">
+                                            <select class="form-select multiple" name="course[]" id="course" multiple>
                                                 <option value="0">Select</option>
                                                 @foreach($courses as $course)
                                                 <option value="{{ $course->id }}">{{ $course->title }}</option>
@@ -163,6 +163,7 @@
         </div>
     </div>
     <script>
+        $('.multiple').select2();
     const courses = @json($courses); // Pass courses from the backend as JSON.
 
     function filterCourses() {

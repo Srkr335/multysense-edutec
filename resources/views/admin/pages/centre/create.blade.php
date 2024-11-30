@@ -176,6 +176,17 @@
                                     </div>
                                     <div class="col-lg-6">
                                         <div class="form-group">
+                                            <label class="form-control-label">Roles</label>
+                                            <select class="form-control" name="role" id="role">
+                                                <option value="">Choose Role</option>
+                                                @foreach ($roles as $name => $id)
+                                                <option value="{{ $id }}">{{ $name }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
                                             <label class="form-control-label">Status</label>
                                             <select class="form-control" name="status" id="status">
                                                 <option value="1">Active</option>

@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Centre;
 use App\Models\User;
+use Spatie\Permission\Models\Role;
+
 
 class CentreController extends Controller
 {
@@ -28,7 +30,8 @@ class CentreController extends Controller
     public function create()
     {
         $users = User::where('type',1)->get();
-        return view ('admin.pages.centre.create',compact('users'));
+        $roles = Role::pluck('id','name')->all();
+        return view ('admin.pages.centre.create',compact('users','roles'));
     }
 
     /**
@@ -54,10 +57,11 @@ class CentreController extends Controller
         $user->email = $request->email;
         $user->mobile_no = $request->phone;
         $user->password = bcrypt($request->password);
-        $user->type =3;
+        $user->type =1;
         $user->save();
         $centre->user_id = $user->id;
         $centre->save();
+        $user->assignRole($request->input('role'));
         return redirect()->route('centre.index')->with('success', 'Centre created successfully.');
     }
 
@@ -127,7 +131,7 @@ if ($update_user) {
     if ($request->filled('password')) {
         $update_user->password = bcrypt($request->password);
     }
-    $update_user->type = 3;
+    $update_user->type = 1;
     $update_user->save();
 }
 

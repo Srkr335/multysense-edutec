@@ -29,8 +29,7 @@
                                                     <th>Sl.No</th>
                                                     <th>Name</th>
                                                     <th>Discount</th>
-                                                    <th>Category</th>
-                                                    <th>Course</th>
+                                                    
                                                     <th>Status</th>
                                                     <th>Action</th>
                                                 </tr>
@@ -43,8 +42,7 @@
                                                     <td>{{ $n }}</td>
                                                     <td>{{ $scheme->name }}</td>
                                                     <td>{{ $scheme->discount }}</td>
-                                                    <td>{{ $scheme->category->name }}</td>
-                                                    <td>{{ $scheme->course->title }}</td>
+                                                    
                                                     <td>
                                                         @if ($scheme->status == 1)
                                                         <span class="badge info-low">Enabled</span>

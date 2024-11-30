@@ -35,9 +35,8 @@
                             <img src="{{ asset('img/img/login1.png') }}" class="img-fluid" alt="Logo">
                         </div>
                         <div class="mentor-course text-center">
-                            <h2>Welcome to <br> IC Park- Fitness Club Courses.</h2>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
-                                ut labore et dolore magna aliqua. Ut enim ad minim veniam.</p>
+                            <h2>Welcome to <br> Wealthmaxima College Of Advanced Studies</h2>
+                            
                         </div>
                     </div>
                     <div class="welcome-login">
@@ -45,9 +44,7 @@
                             <img src="{{ asset('img/img/query.png') }}" class="img-fluid" alt="Logo">
                         </div>
                         <div class="mentor-course text-center">
-                            <h2>Welcome to <br> IC Park- Fitness Club Courses.</h2>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
-                                ut labore et dolore magna aliqua. Ut enim ad minim veniam.</p>
+                        <h2>Welcome to <br> Wealthmaxima College Of Advanced Studies</h2>
                         </div>
                     </div>
                     <div class="welcome-login">
@@ -56,9 +53,7 @@
                                 max-width="300px !important">
                         </div>
                         <div class="mentor-course text-center">
-                            <h2>Welcome to <br> IC Park- Fitness Club Courses.</h2>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
-                                ut labore et dolore magna aliqua. Ut enim ad minim veniam.</p>
+                        <h2>Welcome to <br> Wealthmaxima College Of Advanced Studies</h2>
                         </div>
                     </div>
                 </div>
@@ -70,7 +65,8 @@
                     <div class="loginbox">
                         <div class="w-100">
                             <div class="img-logo">
-                                <img src="assets/img/logo.svg" class="img-fluid" alt="Logo">
+                                <img src="{{ asset('img/logo/logo.png') }}" class="img-fluid" alt="Logo">
+
 
                             </div>
                             <h1>Sign into Your Account</h1>

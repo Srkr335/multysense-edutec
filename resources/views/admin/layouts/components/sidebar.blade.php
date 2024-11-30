@@ -55,6 +55,11 @@
                         <i class="feather-users"></i> Students
                     </a>
                 </li>
+                <li class="nav-item  {{ request()->is('admin/admissions*') ? 'active' : '' }}">
+                    <a href="" class="nav-link">
+                        <i class="feather-users"></i> Admissions
+                    </a>
+                </li>
                 <!-- <li class="nav-item  {{ request()->is('admin/services*') ? 'active' : '' }}">
                     <a href="{{ route('admin.services.index') }}" class="nav-link">
                         <i class="feather-users"></i> Services
