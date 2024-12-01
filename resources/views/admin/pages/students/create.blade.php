@@ -361,26 +361,27 @@ function getCentre() {
         },
         success: function (res) {
             console.log(res);
+            var options = '<option value="">-- Select --</option>';
             if(role == 2)
            {
-            var options = '';
 
             res.forEach(function (data) {
                 var centreId = {!! auth()->user()->centre ? auth()->user()->centre->id :0 !!};
                 if(centreId ==  data.centre.id)
                     {
                         options += '<option value="' + data.centre.id + '">' + data.centre.name + '</option>';
+                        console.log(options);
                     }
                 
             });
            }else{
-            var options = '<option value="">-- Select --</option>';
 
             res.forEach(function (data) {
                 options += '<option value="' + data.centre.id + '">' + data.centre.name + '</option>';
             });
            }
             $('#centre_id').html(options);
+
         },
         error: function (err) {
             console.error(err);

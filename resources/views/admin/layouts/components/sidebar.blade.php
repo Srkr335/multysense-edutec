@@ -28,9 +28,14 @@
                         <i class="feather-home"></i>Dashboard
                     </a>
                 </li>
-                <li class="nav-item {{ request()->is('admin/course*') ? 'active' : '' }}">
+                <li class="nav-item {{ request()->is('admin/centre*') ? 'active' : '' }}">
                     <a href="{{ route('centre.index') }}" class="nav-link">
                         <i class="feather-book"></i>Centre
+                    </a>
+                </li>
+                <li class="nav-item  {{ request()->is('admin/student*') ? 'active' : '' }}">
+                    <a href="{{ route('admin.student.create') }}" class="nav-link">
+                        <i class="feather-users"></i> Admissions
                     </a>
                 </li>
                 @can('courses_list')
@@ -40,7 +45,7 @@
                     </a>
                 </li>
                 @endcan
-                <li class="nav-item {{ request()->is('admin/course*') ? 'active' : '' }}">
+                <li class="nav-item {{ request()->is('admin/scheme*') ? 'active' : '' }}">
                     <a href="{{ route('scheme.index') }}" class="nav-link">
                         <i class="feather-book"></i>Scheme
                     </a>
@@ -53,11 +58,6 @@
                 <li class="nav-item  {{ request()->is('admin/student*') ? 'active' : '' }}">
                     <a href="{{ route('admin.student.index') }}" class="nav-link">
                         <i class="feather-users"></i> Students
-                    </a>
-                </li>
-                <li class="nav-item  {{ request()->is('admin/admissions*') ? 'active' : '' }}">
-                    <a href="" class="nav-link">
-                        <i class="feather-users"></i> Admissions
                     </a>
                 </li>
                 <!-- <li class="nav-item  {{ request()->is('admin/services*') ? 'active' : '' }}">
@@ -85,11 +85,11 @@
                         <i class="ri-slideshow-line"></i>Payments
                     </a>
                 </li>
-                <li class="nav-item ">
+                <!-- <li class="nav-item ">
                     <a href="{{ url('/admin/payment') }}" class="nav-link">
                         <i class="ri-bank-card-line"></i> Payment
                     </a>
-                </li>
+                </li> -->
                 <li class="nav-item ">
                     <a href="{{ url('/admin/tag') }}" class="nav-link">
                         <i class="ri-bookmark-line"></i> Tag

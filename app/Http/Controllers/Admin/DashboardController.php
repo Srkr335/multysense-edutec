@@ -17,8 +17,16 @@ class DashboardController extends Controller
      */
     public function dashboard()
     {
-        $courseCount = Course::count();
-        $studentsCount = Student::count();
+        $rollId = auth()->user()->roles[0]->id;
+        if($rollId == 2)  // role centre
+        {
+            $courseCount = Course::where('centre_id',auth()->user()->centre->id)->count();
+            $studentsCount = Student::where('centre_id',auth()->user()->centre->id)->count();
+        }
+        else{
+            $courseCount = Course::count();
+            $studentsCount = Student::count();
+        }
         $totalEarnings = 0;
         $teacherCount = Tutor::count();
 
