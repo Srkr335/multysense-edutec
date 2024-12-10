@@ -77,6 +77,7 @@ class PaymentController extends Controller
      */
     public function create()
     {
+        $rollId = auth()->user()->roles[0]->id;
         $months = [
             1 => 'January',
             2 => 'February',
@@ -91,7 +92,14 @@ class PaymentController extends Controller
             11 => 'November',
             12 => 'December'
         ];
-        $students = Student::where('status', 1)->get();
+        if($rollId == 2)  // role centre
+        {
+            $students = Student::where('centre_id',auth()->user()->centre->id)->where('status', 1)->get();
+        }
+        else
+        {
+            $students = Student::where('status', 1)->get();
+        }
         $courses = Course::where('status', 1)->orderBy('created_at', 'desc')->get();
 
         return view('admin.pages.payment.create', compact('months', 'students', 'courses'));
@@ -105,6 +113,7 @@ class PaymentController extends Controller
      */
     public function store(Request $request)
     {
+        dd($request->all());
         foreach ($request->students as $student) {
             $exist = StudentPayment::where('student_id', $student)->where('course_id', $request->course)->where('month', $request->month)->first();
             if (!$exist) {
@@ -192,5 +201,14 @@ class PaymentController extends Controller
     public function destroy($id)
     {
         //
+    }
+    public function getCourse(Request $request)
+    {
+        $studId = $request->student_id;
+
+        $student = Student::with('courses')  // Eager load 'category' with id and name columns
+        ->where('id', $studId)
+        ->get();
+        dd($student);
     }
 }

@@ -100,6 +100,7 @@ class StudentController extends Controller
         $student->scheme_id = $request->scheme;
         $student->category_id = $request->category;
         $student->centre_id = $request->centre;
+        $student->status = $request->status;
         $student->save();
 
         return redirect()->route('admin.student.index')->with('success', 'Student added successfully');
@@ -170,7 +171,7 @@ class StudentController extends Controller
         }
         $student->reg_no = $request->register_no; 
         $student->course_id = $request->course; 
-        $student->batch_id = $request->batch;
+        $student->status = $request->status;
         $student->save();
 
         $user = User::find($student->user_id);

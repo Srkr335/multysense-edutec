@@ -96,7 +96,7 @@
                                         <div class="form-group">
                                             <label class="form-control-label">Register No</label>
                                             <input type="text" class="form-control" placeholder="Enter register no"
-                                                name="register_no" required>
+                                                name="register_no">
                                         </div>
                                     </div>
                                     <div class="col-lg-6">
@@ -233,6 +233,15 @@
                                             <label class="form-control-label">Password</label>
                                             <input type="password" class="form-control" placeholder="Enter password"
                                                 name="password">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <label class="form-control-label">Status</label>
+                                            <select class="form-control" name="status" id="status">
+                                                <option value="1">Active</option>
+                                                <option value="0">In-Active</option>
+                                            </select>
                                         </div>
                                     </div>
                                     {{-- <div class="col-lg-6">

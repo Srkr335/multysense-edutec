@@ -116,8 +116,7 @@
                                             <div class="form-group col-md-6">
                                                 <label class="add-course-label">Centre Name<span
                                                 class="text-danger">*</span></label>
-                                                <select class="form-control select" name="centre_name">
-                                                    <option value="">Select Centre</option>
+                                                <select class="form-control select" name="centre_name[]" id="centre_name" multiple>
                                                     @foreach ($centres as $centre)
                                                         <option value="{{ $centre->id }}">{{ $centre->name }}</option>
                                                     @endforeach
@@ -131,6 +130,7 @@
                                                     <option value="">Select</option>
                                                     <option value="1">1 Year</option>
                                                     <option value="2">6 Month</option>
+                                                    <option value="3">8 Month</option>
                                                 </select>
                                             </div>
                                             <div class="form-group col-md-6">

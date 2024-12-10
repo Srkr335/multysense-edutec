@@ -11,6 +11,7 @@ use App\Models\CourseStudyMaterial;
 use App\Models\CourseTag;
 use App\Models\CourseTutor;
 use App\Models\Centre;
+use App\Models\CourseCentre;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\DataTables;
@@ -45,8 +46,19 @@ class CourseController extends Controller
                         return '<img src="' . asset('img/no_image.png') . '" class="img-fluid " alt="" width="60px">';
                     }
                 })
+                // ->addColumn('duration', function ($row) {
+                //     return ucfirst($row->duration == 1 ? '1 Year' : '6 Month');
+                // })
                 ->addColumn('duration', function ($row) {
-                    return ucfirst($row->duration == 1 ? '1 Year' : '6 Month');
+                    if ($row->duration == 1) {
+                        return '1 Year';
+                    } elseif ($row->duration == 2) {
+                        return '6 Month';
+                    } elseif ($row->duration == 3) {
+                        return '8 Month';
+                    } else {
+                        return 'Unknown Duration';
+                    }
                 })
                 ->addColumn('level', function ($row) {
                     return ucfirst($row->level);
@@ -92,7 +104,7 @@ class CourseController extends Controller
             'level'        => 'required',
             'class_count'        => 'required',
             'quiz_count'        => 'required',
-            'centre_name'     => 'required',
+            'centre_name[]'     => 'required',
             'duration'     => 'required',
             // 'main_image'        => 'required',
             // 'main_video_link' => 'required',
@@ -111,10 +123,25 @@ class CourseController extends Controller
         $course->is_newly_added = $request->is_newly_added;
         $course->is_free = $request->is_free;
         $course->status = $request->status;
-        $course->centre_id = $request->centre_name;
+        // $course->centre_id = $request->centre_name;
         $course->duration = $request->duration;
         $course->module_count = $request->module_count;
         $course->save();
+
+        if(count($request->centre_name) <=1)
+        {  
+            $centre = new CourseCentre();
+            $centre->course_id = $course->id;
+            $centre->centre_id = $request->centre_name ? $request->centre_name[0] : '';
+            $centre->save();
+        }else{
+            foreach($request->centre_name as $centreName){
+                $centre = new CourseCentre();
+                $centre->course_id = $course->id;
+                $centre->centre_id = $centreName;
+                $centre->save();
+            }
+        }
 
         $coursePLaylist = new CoursePlaylist();
         $coursePLaylist->course_id = $course->id;
@@ -191,6 +218,8 @@ class CourseController extends Controller
         $course = Course::find($id);
         $centres = Centre::where('status',1)->get();
 
+        // $centres = Centre::where('status',1)->get();
+
         return view('admin.pages.course.edit', compact('categories', 'course','centres'));
     }
 
@@ -203,16 +232,6 @@ class CourseController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $request->validate([
-            'category_id' => 'required',
-            'title'        => 'required',
-            'fees'        => 'required',
-            'level'        => 'required',
-            'class_count'        => 'required',
-            'quiz_count'        => 'required',
-            'centre_name'     => 'required',
-            'duration'     => 'required',
-        ]);
 
         $course = Course::find($id);
         $course->category_id = $request->category_id;
@@ -228,10 +247,26 @@ class CourseController extends Controller
         $course->is_newly_added = $request->is_newly_added;
         $course->is_free = $request->is_free;
         $course->status = $request->status;
-        $course->centre_id = $request->centre_name;
         $course->duration = $request->duration;
         $course->module_count = $request->module_count;
         $course->save();
+
+        CourseCentre::find($id)->delete();
+
+        if(count($request->centre_name) <=1)
+        {  
+            $centre = new CourseCentre();
+            $centre->course_id = $course->id;
+            $centre->centre_id = $request->centre_name ? $request->centre_name[0] : '';
+            $centre->save();
+        }else{
+            foreach($request->centre_name as $centreName){
+                $centre = new CourseCentre();
+                $centre->course_id = $course->id;
+                $centre->centre_id = $centreName;
+                $centre->save();
+            }
+        }
 
         $coursePLaylist = CoursePlaylist::where('course_id', $id)->first();
         // $coursePLaylist->course_id = $course->id;

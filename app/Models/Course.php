@@ -23,4 +23,14 @@ class Course extends Model
     {
         return $this->belongsTo(Centre::class, 'centre_id', 'id');
     }
+
+    public function centres()
+    {
+        return $this->hasMany(CourseCentre::class, 'course_id', 'id');
+    }
+
+    public function centreIds()
+    {
+        return $this->centres()->pluck('centre_id')->toArray();
+    }
 }

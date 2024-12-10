@@ -20,11 +20,13 @@
                                 </div>
                             </div>
                             <div class="profile-group">
+                            @can('student_edit')
                                 <div class="d-flex justify-content-end" style="margin-right: -10px;">
                                     <a href="{{ route('admin.student.edit', ['id' => $student->id]) }}"><i
                                             class="fa-solid fa-edit"></i></a>
 
                                 </div>
+                                @endcan
                                 <div class="profile-name text-center">
                                     <h4><a href="#">{{ $student->user->name }}
                                             {{-- @if ($student->payment_status == 1)

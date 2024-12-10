@@ -119,10 +119,11 @@
                                             <div class="form-group col-md-6">
                                                 <label class="add-course-label">Centre Name<span
                                                 class="text-danger">*</span></label>
-                                                <select class="form-control select" name="centre_name">
+                                                <select class="form-control multiple" name="centre_name[]" id="centre_name" multiple>
                                                     <option value="">Select Centre</option>
                                                     @foreach ($centres as $centre)
-                                                        <option value="{{ $centre->id }}"{{$course->centre_id == $centre->id ? 'selected' : ''}}>{{ $centre->name }}</option>
+                                                        <!-- <option value="{{ $centre->id }}"{{$course->centre_id == $centre->id ? 'selected' : ''}}>{{ $centre->name }}</option> -->
+                                                        <option value="{{ $centre->id }}" {{in_array($centre->id,$course->centreIds()) ? 'selected' : ''}}>{{ $centre->name }}</option>
                                                     @endforeach
                                                 </select>
                                                 
@@ -134,6 +135,7 @@
                                                     <option value="">Select</option>
                                                     <option value="1" {{$course->duration == 1 ? 'selected' : ''}}>1 Year</option>
                                                     <option value="2" {{$course->duration == 2 ? 'selected' : ''}}>6 Month</option>
+                                                    <option value="3" {{$course->duration == 3 ? 'selected' : ''}}>8 Month</option>
                                                 </select>
                                             </div>
                                             <div class="form-group col-md-6">
@@ -678,9 +680,14 @@
             </div>
         </div>
     </div>
+    <script>      
+                        $('.multiple').select2();
+
+                        </script>
 
     @push('scripts')
-        <script>
+        <script>      
+                  
             function fileNameChange(input, name) {
                 let fileInput = document.getElementById(input);
                 let span = document.getElementById(name);

@@ -60,8 +60,8 @@ Route::middleware(['auth', 'user-access:admin'])->group(function () {
 
         // student
         Route::get('/students', [StudentController::class, 'index'])->name('admin.student.index');
-        Route::get('/student/create', [StudentController::class, 'create'])->name('admin.student.create');
-        Route::post('/student/store', [StudentController::class, 'store'])->name('admin.student.store');
+        Route::get('/students/create', [StudentController::class, 'create'])->name('admin.student.create');
+        Route::post('/students/store', [StudentController::class, 'store'])->name('admin.student.store');
         Route::get('/students/view/{id}', [StudentController::class, 'show'])->name('admin.student.show');
         Route::get('/students/edit/{id}', [StudentController::class, 'edit'])->name('admin.student.edit');
         Route::post('/students/update/{id}', [StudentController::class, 'update'])->name('admin.student.update');
@@ -94,6 +94,7 @@ Route::middleware(['auth', 'user-access:admin'])->group(function () {
         Route::post('/payments/store', [PaymentController::class, 'store'])->name('admin.payment.store');
         Route::get('/payments/edit/{id}', [PaymentController::class, 'edit'])->name('admin.payment.edit');
         Route::post('/payments/update/{id}', [PaymentController::class, 'update'])->name('admin.payment.update');
+        Route::get('/payments/getcourse', [PaymentController::class, 'getCourse'])->name('admin.payment.select_course');
 
         // Tags
         // Route::get('/tag', [TagController::class, 'index']);

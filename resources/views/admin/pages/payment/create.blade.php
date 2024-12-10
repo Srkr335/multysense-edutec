@@ -32,24 +32,22 @@
                                     <div class="col-lg-6">
                                         <div class="form-group">
                                             <label class="form-control-label">Students</label>
-                                            <select class="form-select select country-select select2-hidden-accessible"
-                                                name="students[]" data-select2-id="1" tabindex="-1" aria-hidden="true"
-                                                multiple required>
+                                            <select class="form-select multiple" name="students[]" id="student_id" required>
                                                 <option data-select2-id="3">Select Student</option>
                                                 @foreach ($students as $key => $students)
-                                                    <option value="{{ $students->id }}">{{ $students->user->name }}</option>
+                                                    <option value="{{ $students->id }}">{{ $students->user->name.' '.'['.$students->reg_no.']'}}</option>
                                                 @endforeach
                                             </select>
                                         </div>
                                     </div>
                                     <div class="col-lg-6">
                                         <div class="form-group">
-                                            <label class="form-control-label">Courses</label>
-                                            <select class="form-select select " name="course" id="course" required>
+                                            <label class="form-control-label">Course</label>
+                                            <select class="form-select select " name="course" id="course_id" required>
                                                 <option data-select2-id="3">Select Course</option>
-                                                @foreach ($courses as $key => $course)
+                                                <!-- @foreach ($courses as $key => $course)
                                                     <option value="{{ $course->id }}">{{ $course->title }}</option>
-                                                @endforeach
+                                                @endforeach -->
                                             </select>
                                         </div>
                                     </div>
@@ -103,4 +101,46 @@
 
         </div>
     </div>
+
+    <script>
+        $('.multiple').select2();
+    const students = @json($students); // Pass courses from the backend as JSON.
+</script>
+<script>
+    $('#student_id').change(function () {
+    getCourse();
+});
+
+function getCourse() {
+    var studentId = $('#student_id').val();
+
+    if (!studentId) {
+        // Clear the categories dropdown if no scheme is selected
+        $('#course_id').html('<option value="">Choose Course</option>');
+        return;
+    }
+
+    $.ajax({
+        url: "{{ route('admin.payment.select_course') }}",
+        method: "get",
+        headers: {
+            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+        },
+        data: {
+            student_id: studentId,
+        },
+        success: function (res) {
+            console.log(res);
+            var options = '<option value="">-- Select --</option>';
+            res.forEach(function (data) {
+                options += '<option value="' + data.course.id + '">' + data.course.title + '</option>';
+            });
+            $('#course_id').html(options);
+        },
+        error: function (err) {
+            console.error(err);
+        }
+    });
+}
+</script>
 @endsection
