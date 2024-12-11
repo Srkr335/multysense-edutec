@@ -29,13 +29,11 @@ class StudentController extends Controller
     public function index()
     {
         $rollId = auth()->user()->roles[0]->id;
-        if($rollId == 2)  // role centre
+        if ($rollId == 2)  // role centre
         {
-            $students = Student::where('centre_id',auth()->user()->centre->id)->orderBy('id', 'desc')->paginate(5);
-        }
-        else
-        {
-            $students = Student::orderBy('id', 'desc')->paginate(5);
+            $students = Student::where('centre_id', auth()->user()->centre->id)->orderBy('id', 'desc')->paginate(10);
+        } else {
+            $students = Student::orderBy('id', 'desc')->paginate(10);
         }
         return view('admin.pages.students.index', compact('students'));
     }
@@ -47,12 +45,12 @@ class StudentController extends Controller
      */
     public function create()
     {
-        $schemes = Scheme::where('status',1)->get();
-        $categories = Category::where('status',1)->get();
+        $schemes = Scheme::where('status', 1)->get();
+        $categories = Category::where('status', 1)->get();
         $batches = Batch::where('status', 1)->get();
         $courses = Course::where('status', 1)->get();
         $countries = Country::get();
-        return view('admin.pages.students.create', compact('countries','courses','batches','schemes','categories'));
+        return view('admin.pages.students.create', compact('countries', 'courses', 'batches', 'schemes', 'categories'));
     }
 
     /**
@@ -94,14 +92,22 @@ class StudentController extends Controller
             $request->image->move(public_path('/images/student'), $imageName);
             $student->image = $imageName;
         }
-        $student->reg_no = $request->register_no; 
-        $student->course_id = $request->course; 
+        $student->reg_no = $request->register_no;
+        // $student->course_id = $request->course;
         $student->batch_id = $request->batch;
         $student->scheme_id = $request->scheme;
         $student->category_id = $request->category;
         $student->centre_id = $request->centre;
         $student->status = $request->status;
         $student->save();
+
+        if ($request->course) {
+            $purchased = new StudentPurchasedCourse();
+            $purchased->student_id = $student->id;
+            $purchased->course_id = $request->course;
+            $purchased->purchased_date = $student->created_at;
+            $purchased->save();
+        }
 
         return redirect()->route('admin.student.index')->with('success', 'Student added successfully');
     }
@@ -136,7 +142,7 @@ class StudentController extends Controller
         $courses = Course::where('status', 1)->get();
         $purchasedCousers = StudentPurchasedCourse::where('student_id', $id)->get();
         $wishlistedCousers = StudentWishlistedCourse::where('student_id', $id)->get();
-        return view('admin.pages.students.edit', compact('student', 'purchasedCousers', 'wishlistedCousers', 'countries','batches','courses'));
+        return view('admin.pages.students.edit', compact('student', 'purchasedCousers', 'wishlistedCousers', 'countries', 'batches', 'courses'));
     }
 
     /**
@@ -169,8 +175,8 @@ class StudentController extends Controller
             $request->image->move(public_path('/images/student'), $imageName);
             $student->image = $imageName;
         }
-        $student->reg_no = $request->register_no; 
-        $student->course_id = $request->course; 
+        $student->reg_no = $request->register_no;
+        // $student->course_id = $request->course;
         $student->status = $request->status;
         $student->save();
 
@@ -182,6 +188,22 @@ class StudentController extends Controller
         }
         $user->mobile_no = $request->phone;
         $user->save();
+
+        if ($request->course) {
+            $purchased = StudentPurchasedCourse::where('student_id', $student->id)->first();
+            if ($purchased) {
+                // $purchased->students_id = $student->id;
+                $purchased->course_id = $request->course;
+                $purchased->purchased_date = $student->created_at;
+                $purchased->save();
+            } else {
+                $purchased = new StudentPurchasedCourse();
+                $purchased->student_id = $student->id;
+                $purchased->course_id = $request->course;
+                $purchased->purchased_date = $student->created_at;
+                $purchased->save();
+            }
+        }
 
         return redirect()->route('admin.student.index')->with('success', 'Student updated successfully');
     }
@@ -233,35 +255,34 @@ class StudentController extends Controller
             ->unique('cat_id');
 
         return $scheme;
-
     }
     public function getCourse(Request $request)
     {
         $catId = $request->cat_id;
 
         $cate = SchemeCategoryCourse::with('course')  // Eager load 'category' with id and name columns
-        ->where('cat_id', $catId)
-        ->get();
+            ->where('cat_id', $catId)
+            ->get();
 
-    return $cate;
+        return $cate;
     }
     public function getCentre(Request $request)
     {
         $courseId = $request->course_id;
 
         $course = Course::with('centre')  // Eager load 'category' with id and name columns
-        ->where('id', $courseId)
-        ->get();
+            ->where('id', $courseId)
+            ->get();
 
-    return $course;
+        return $course;
     }
     public function getBatch(Request $request)
     {
         $centreId = $request->centre_id;
-        
-        $batch = Batch::where('centre_id', $centreId)
-        ->get();
 
-    return $batch;
+        $batch = Batch::where('centre_id', $centreId)
+            ->get();
+
+        return $batch;
     }
 }

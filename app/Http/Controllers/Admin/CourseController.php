@@ -85,8 +85,8 @@ class CourseController extends Controller
     public function create()
     {
         $categories = Category::get();
-        $centres = Centre::where('status',1)->get();
-        return view('admin.pages.course.create', compact('categories','centres'));
+        $centres = Centre::where('status', 1)->get();
+        return view('admin.pages.course.create', compact('categories', 'centres'));
     }
 
     /**
@@ -128,19 +128,12 @@ class CourseController extends Controller
         $course->module_count = $request->module_count;
         $course->save();
 
-        if(count($request->centre_name) <=1)
-        {  
+
+        foreach ($request->centre_name as $centreName) {
             $centre = new CourseCentre();
             $centre->course_id = $course->id;
-            $centre->centre_id = $request->centre_name ? $request->centre_name[0] : '';
+            $centre->centre_id = $centreName;
             $centre->save();
-        }else{
-            foreach($request->centre_name as $centreName){
-                $centre = new CourseCentre();
-                $centre->course_id = $course->id;
-                $centre->centre_id = $centreName;
-                $centre->save();
-            }
         }
 
         $coursePLaylist = new CoursePlaylist();
@@ -216,11 +209,11 @@ class CourseController extends Controller
     {
         $categories = Category::get();
         $course = Course::find($id);
-        $centres = Centre::where('status',1)->get();
+        $centres = Centre::where('status', 1)->get();
 
         // $centres = Centre::where('status',1)->get();
 
-        return view('admin.pages.course.edit', compact('categories', 'course','centres'));
+        return view('admin.pages.course.edit', compact('categories', 'course', 'centres'));
     }
 
     /**
@@ -251,21 +244,15 @@ class CourseController extends Controller
         $course->module_count = $request->module_count;
         $course->save();
 
-        CourseCentre::find($id)->delete();
+        if (CourseCentre::where('course_id', $id)->exists()) {
+            CourseCentre::where('course_id', $id)->delete();
+        }
 
-        if(count($request->centre_name) <=1)
-        {  
+        foreach ($request->centre_name as $centreName) {
             $centre = new CourseCentre();
             $centre->course_id = $course->id;
-            $centre->centre_id = $request->centre_name ? $request->centre_name[0] : '';
+            $centre->centre_id = $centreName;
             $centre->save();
-        }else{
-            foreach($request->centre_name as $centreName){
-                $centre = new CourseCentre();
-                $centre->course_id = $course->id;
-                $centre->centre_id = $centreName;
-                $centre->save();
-            }
         }
 
         $coursePLaylist = CoursePlaylist::where('course_id', $id)->first();

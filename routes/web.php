@@ -121,7 +121,7 @@ Route::middleware(['auth', 'user-access:admin'])->group(function () {
         Route::get('/settings/payments', [SettingsController::class, 'payments'])->name('settings.payments');
         Route::get('/settings/user', [SettingsController::class, 'user_view'])->name('settings.user');
         Route::get('/get-users', [SettingsController::class, 'getusers'])->name('settings.getuser');
-        
+
 
         // category
         Route::get('/banner', [BannerController::class, 'index'])->name('admin.banner.index');
@@ -139,50 +139,48 @@ Route::middleware(['auth', 'user-access:admin'])->group(function () {
         Route::get('/services/delete/{id} ', [ServiceController::class, 'destroy'])->name('admin.services.delete');
 
         //batch
-        Route::resource('batch',BatchController::class);
-        Route::post('batch/update',[BatchController::class, 'update'])->name('admin.batch.update');
-        Route::post('batch/delete',[BatchController::class, 'destroy'])->name('admin.batch.delete');
-        
+        Route::resource('batch', BatchController::class);
+        Route::post('batch/update', [BatchController::class, 'update'])->name('admin.batch.update');
+        Route::post('batch/delete', [BatchController::class, 'destroy'])->name('admin.batch.delete');
+
         //centre
-        Route::resource('centre',CentreController::class);
-        Route::post('centre/update',[CentreController::class, 'update'])->name('admin.centre.update');
-        Route::post('centre/delete',[CentreController::class, 'destroy'])->name('admin.centre.delete');
+        Route::resource('centre', CentreController::class);
+        Route::post('centre/update', [CentreController::class, 'update'])->name('admin.centre.update');
+        Route::post('centre/delete', [CentreController::class, 'destroy'])->name('admin.centre.delete');
 
 
         //exam
-        Route::resource('exam',ExamController::class);
-        Route::post('exam/update',[ExamController::class, 'update'])->name('admin.exam.update');
-        Route::post('exam/delete',[ExamController::class, 'destroy'])->name('admin.exam.delete');
+        Route::resource('exam', ExamController::class);
+        Route::post('exam/update', [ExamController::class, 'update'])->name('admin.exam.update');
+        Route::post('exam/delete', [ExamController::class, 'destroy'])->name('admin.exam.delete');
 
         //module
-        Route::resource('modules',ModulesController::class);
-        Route::post('modules/update',[ModulesController::class, 'update'])->name('admin.modules.update');
-        Route::post('modules/delete',[ModulesController::class, 'destroy'])->name('admin.modules.delete');
+        Route::resource('modules', ModulesController::class);
+        Route::post('modules/update', [ModulesController::class, 'update'])->name('admin.modules.update');
+        Route::post('modules/delete', [ModulesController::class, 'destroy'])->name('admin.modules.delete');
 
-         //exam result
-         Route::resource('exam_result',ResultController::class);
+        //exam result
+        Route::resource('exam_result', ResultController::class);
         //  Route::post('modules/update',[ModulesController::class, 'update'])->name('admin.modules.update');
         //  Route::post('modules/delete',[ModulesController::class, 'destroy'])->name('admin.modules.delete');
 
-         //roles 
-         Route::post('/settings/roles-store', [RolesController::class, 'store'])->name('admin.settings.roles_store');
-         Route::get('/settings/roles-edit/{id}', [RolesController::class, 'edit'])->name('admin.settings.roles_edit');
-         Route::post('/settings/roles-update', [RolesController::class, 'update'])->name('admin.settings.roles_update');
-         Route::get('/settings/roles-destroy/{id}', [RolesController::class, 'destroy'])->name('admin.settings.roles_delete');
+        //roles 
+        Route::post('/settings/roles-store', [RolesController::class, 'store'])->name('admin.settings.roles_store');
+        Route::get('/settings/roles-edit/{id}', [RolesController::class, 'edit'])->name('admin.settings.roles_edit');
+        Route::post('/settings/roles-update', [RolesController::class, 'update'])->name('admin.settings.roles_update');
+        Route::get('/settings/roles-destroy/{id}', [RolesController::class, 'destroy'])->name('admin.settings.roles_delete');
 
-         //user
-         Route::get('/settings/user-create', [RolesController::class, 'user_create'])->name('admin.settings.create_user');
-         Route::post('/settings/store_user', [RolesController::class, 'store_user'])->name('admin.settings.store_user');
-         Route::get('/settings/editUser/{id}', [RolesController::class, 'editUser'])->name('admin.settings.editUser');
-         Route::post('/settings/update-user', [RolesController::class, 'update_user'])->name('admin.settings.update_user');
-         Route::get('/settings/delete-user/{id}', [RolesController::class, 'destroy_user'])->name('admin.settings.deleteUser');
+        //user
+        Route::get('/settings/user-create', [RolesController::class, 'user_create'])->name('admin.settings.create_user');
+        Route::post('/settings/store_user', [RolesController::class, 'store_user'])->name('admin.settings.store_user');
+        Route::get('/settings/editUser/{id}', [RolesController::class, 'editUser'])->name('admin.settings.editUser');
+        Route::post('/settings/update-user', [RolesController::class, 'update_user'])->name('admin.settings.update_user');
+        Route::get('/settings/delete-user/{id}', [RolesController::class, 'destroy_user'])->name('admin.settings.deleteUser');
 
-         //scheme  
-         Route::resource('scheme',SchemeController::class);
-         Route::post('/scheme/update', [SchemeController::class, 'update'])->name('admin.scheme.update');
-         Route::post('/scheme/destroy', [SchemeController::class, 'destroy'])->name('admin.scheme.delete');
-        
-
+        //scheme  
+        Route::resource('scheme', SchemeController::class);
+        Route::post('/scheme/update', [SchemeController::class, 'update'])->name('admin.scheme.update');
+        Route::post('/scheme/destroy', [SchemeController::class, 'destroy'])->name('admin.scheme.delete');
     });
 });
 
