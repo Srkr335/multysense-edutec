@@ -17,9 +17,9 @@ class BatchController extends Controller
      */
     public function index()
     {
-       $batchs = Batch::with('course')
-       ->orderBy('id', 'desc')->paginate(10);
-       return view ('admin.pages.batch.index',compact('batchs'));
+        $batchs = Batch::with('course')
+            ->orderBy('id', 'desc')->paginate(10);
+        return view('admin.pages.batch.index', compact('batchs'));
     }
 
     /**
@@ -29,9 +29,9 @@ class BatchController extends Controller
      */
     public function create()
     {
-        $courses = Course::where('status',1)->get();
-        $centres = Centre::where('status',1)->get();
-        return view ('admin.pages.batch.create',compact('courses','centres'));
+        $courses = Course::where('status', 1)->get();
+        $centres = Centre::where('status', 1)->get();
+        return view('admin.pages.batch.create', compact('courses', 'centres'));
     }
 
     /**
@@ -72,10 +72,10 @@ class BatchController extends Controller
      */
     public function edit($id)
     {
-        $courses = Course::where('status',1)->get();
-        $centres = Centre::where('status',1)->get();
+        $courses = Course::where('status', 1)->get();
+        $centres = Centre::where('status', 1)->get();
         $batch = Batch::find($id);
-        return view ('admin.pages.batch.edit',compact('courses','centres','batch'));
+        return view('admin.pages.batch.edit', compact('courses', 'centres', 'batch'));
     }
 
     /**
@@ -89,12 +89,12 @@ class BatchController extends Controller
     {
         $batch_id = $request->batch_id;
         $update_batch = Batch::find($batch_id);
-        if($update_batch)
-        {
+        if ($update_batch) {
             $update_batch->name = $request->batch_name;
             $update_batch->course_id  = $request->course_name;
-            $update_batch->year = $request->batch_year;
-            $update_batch->month = $request->batch_month;
+            // $update_batch->year = $request->batch_year;
+            $update_batch->start_date = $request->start_date;
+            $update_batch->end_date = $request->end_date;
             $update_batch->centre_id  = $request->centre_name;
             $update_batch->status = $request->status;
             $update_batch->save();

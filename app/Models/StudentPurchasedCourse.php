@@ -13,4 +13,8 @@ class StudentPurchasedCourse extends Model
     {
         return $this->belongsTo(Course::class);
     }
+    public function coursedtls()
+    {
+        return $this->belongsTo(Course::class, 'course_id');
+    }
 }

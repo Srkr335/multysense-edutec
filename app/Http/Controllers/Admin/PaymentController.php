@@ -92,12 +92,10 @@ class PaymentController extends Controller
             11 => 'November',
             12 => 'December'
         ];
-        if($rollId == 2)  // role centre
+        if ($rollId == 2)  // role centre
         {
-            $students = Student::where('centre_id',auth()->user()->centre->id)->where('status', 1)->get();
-        }
-        else
-        {
+            $students = Student::where('centre_id', auth()->user()->centre->id)->where('status', 1)->get();
+        } else {
             $students = Student::where('status', 1)->get();
         }
         $courses = Course::where('status', 1)->orderBy('created_at', 'desc')->get();
@@ -113,7 +111,6 @@ class PaymentController extends Controller
      */
     public function store(Request $request)
     {
-        dd($request->all());
         foreach ($request->students as $student) {
             $exist = StudentPayment::where('student_id', $student)->where('course_id', $request->course)->where('month', $request->month)->first();
             if (!$exist) {
@@ -207,8 +204,8 @@ class PaymentController extends Controller
         $studId = $request->student_id;
 
         $student = Student::with('courses')  // Eager load 'category' with id and name columns
-        ->where('id', $studId)
-        ->get();
+            ->where('id', $studId)
+            ->get();
         dd($student);
     }
 }

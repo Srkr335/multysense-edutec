@@ -101,6 +101,7 @@ class CourseController extends Controller
             'category_id' => 'required',
             'title'        => 'required',
             'fees'        => 'required',
+            'installment'        => 'required',
             'level'        => 'required',
             'class_count'        => 'required',
             'quiz_count'        => 'required',
@@ -114,6 +115,7 @@ class CourseController extends Controller
         $course->title = $request->title;
         $course->description = $request->description;
         $course->fees = $request->fees;
+        $course->installment = $request->installment;
         $course->level = $request->level;
         $course->class_count = $request->class_count;
         $course->quiz_count = $request->quiz_count;
@@ -231,6 +233,7 @@ class CourseController extends Controller
         $course->title = $request->title;
         $course->description = $request->description;
         $course->fees = $request->fees;
+        $course->installment = $request->installment;
         $course->level = $request->level;
         $course->class_count = $request->class_count;
         $course->quiz_count = $request->quiz_count;

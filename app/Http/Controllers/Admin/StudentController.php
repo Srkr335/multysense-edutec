@@ -13,6 +13,7 @@ use App\Models\Batch;
 use App\Models\Scheme;
 use App\Models\Category;
 use App\Models\Centre;
+use App\Models\StudentPayment;
 use App\Models\SchemeCategoryCourse;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -61,6 +62,7 @@ class StudentController extends Controller
      */
     public function store(Request $request)
     {
+        dd($request->all());
         $user = new User();
         $user->name = $request->name;
         $user->email = $request->email;
@@ -105,6 +107,8 @@ class StudentController extends Controller
             $purchased = new StudentPurchasedCourse();
             $purchased->student_id = $student->id;
             $purchased->course_id = $request->course;
+            $purchased->course_total_amount = $request->course_fee;
+            $purchased->installment = $request->course_installment;
             $purchased->purchased_date = $student->created_at;
             $purchased->save();
         }
@@ -121,11 +125,27 @@ class StudentController extends Controller
     public function show($id)
     {
         $student = Student::find($id);
-        $purchasedCousers = StudentPurchasedCourse::where('student_id', $id)->get();
+        $purchasedCouse = StudentPurchasedCourse::where('student_id', $id)->first();
         $wishlistedCousers = StudentWishlistedCourse::where('student_id', $id)->get();
-
+        $studentPayments = StudentPayment::where('student_id', $id)->orderBy('created_at', 'asc')->get();
+        $totalDue = $studentPayments->sum('due_amount'); // Sum up all due amounts
+        $totalPaid = $studentPayments->sum('pay_amount');
+        $totalamount = 0;
+        foreach ($studentPayments as $studenpayment)
+        {
+            $totalamount = $studenpayment->current_installment + $totalDue;
+        }
+        $totalPaid =  $studentPayments->sum('pay_amount');
+        // $monthlyInstallment =  $purchasedCouse->course_total_amount/$purchasedCouse->installment;
+        if ($purchasedCouse->installment > 0) {
+            $monthlyInstallment = $purchasedCouse->course_total_amount / $purchasedCouse->installment;
+            $monthlyInstallment = number_format($monthlyInstallment, 2); // Formats to two decimal places
+        } else {
+            $monthlyInstallment = 0; // Handle case where installment is zero
+        }
+     
         $courses = Course::where('status', 1)->pluck('title', 'id')->toArray();
-        return view('admin.pages.students.show', compact('student', 'purchasedCousers', 'wishlistedCousers', 'courses'));
+        return view('admin.pages.students.show', compact('student', 'purchasedCouse', 'wishlistedCousers', 'courses', 'studentPayments', 'totalPaid','monthlyInstallment','totalamount'));
     }
 
     /**
@@ -284,5 +304,36 @@ class StudentController extends Controller
             ->get();
 
         return $batch;
+    }
+    public function addPayment(Request $request)
+    {
+        $purchasedCouse = StudentPurchasedCourse::where('student_id',$request->student_id)->first();
+        if ($purchasedCouse->installment > 0) {
+            $monthlyInstallment = $purchasedCouse->course_total_amount / $purchasedCouse->installment;
+            $monthlyInstallment =$monthlyInstallment; // Formats to two decimal places
+        } else {
+            $monthlyInstallment = 0; // Handle case where installment is zero
+        }
+        $dueAmount=$monthlyInstallment -  $request->amount;
+
+        $purchasedCourse = StudentPurchasedCourse::where('student_id', $request->student_id)->where('course_id',$request->course_id)->first();
+        $lastInvoice = StudentPayment::latest()->first();
+        $installment = StudentPayment::where('student_id',$request->student_id)->where('course_id',$request->course_id)->latest()->first();
+        $invoiceNumber = $lastInvoice ? $lastInvoice->invoice_number + 1 : 1;
+        $studentId =  $request->student_id;
+        $payment = new StudentPayment();
+        $payment->student_id = $request->student_id;
+        $payment->course_id = $request->course_id;
+        $payment->invoice_number = $invoiceNumber;
+        $payment->pay_amount = $request->amount;
+        $payment->installment = $installment ? $installment->installment + 1 : 1;
+        $payment->amount = $purchasedCourse->course_total_amount;
+        $payment->current_installment = $monthlyInstallment;
+        $payment->due_amount =$dueAmount;
+        $payment->payment_date = Carbon::parse($request->payment_date)->format('Y-m-d');
+        $payment->status = $request->status;
+        $payment->save();
+
+        return redirect()->route('admin.student.show', ['id' => $studentId])->with('status', 'Payments added successfully');
     }
 }
