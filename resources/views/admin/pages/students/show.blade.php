@@ -201,6 +201,7 @@
                             <th>Sl.No</th>
                             <th>Invoice Number</th>
                             <th>Paid Amount</th>
+                            <th></th>
                             <th>Due Amount</th>
                             <th>Payment Date</th>
                             <th>Status</th>
@@ -216,6 +217,7 @@
                             <td><a href="#">#{{ str_pad($payment->invoice_number, 3, '0', STR_PAD_LEFT) }}</a></td>
                             <td>{{ $payment->pay_amount }}</td>
                             <td>{{ $payment->due_amount }}</td>
+                            <td></td>
                             <td>{{ date('d-m-Y',strtotime($payment->payment_date)) }}</td>
                             <td>
                                 @if ($payment->status == 1)

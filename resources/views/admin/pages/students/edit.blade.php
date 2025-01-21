@@ -118,9 +118,11 @@
                                             <select class="form-control" name="course" id="course">
                                                 <option value="">Select Course</option>
                                                 @foreach($courses as $course)
-                                                <option value="{{ $course->id }}"{{$student->course_id == $course->id ? 'selected' : '' }}>{{ $course->title }}</option>
+                                                <option value="{{ $course->id }}"{{$purchasedCousers->course_id == $course->id ? 'selected' : '' }}>{{ $course->title }}</option>
                                                 @endforeach
                                             </select>
+                                            <input type="text" name="course_fee" value="{{@$purchasedCousers->coursedtls->fees}}">
+                                            <input type="text" name="course_installment" value="{{@$purchasedCousers->coursedtls->installment}}">
                                         </div>
                                     </div><div class="col-lg-6">
                                         <div class="form-group">

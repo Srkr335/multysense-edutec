@@ -62,7 +62,11 @@ class StudentController extends Controller
      */
     public function store(Request $request)
     {
-        dd($request->all());
+        $schemeDtl = Scheme::where('id',$request->scheme)->first();
+        $offerPercentage = $schemeDtl->discount; // Assuming this is the offer percentage
+        $courseFee = $request->course_fee;
+        $discountAmount = ($courseFee * $offerPercentage) / 100;
+        $courseTotalAmount = $courseFee - $discountAmount;
         $user = new User();
         $user->name = $request->name;
         $user->email = $request->email;
@@ -107,7 +111,7 @@ class StudentController extends Controller
             $purchased = new StudentPurchasedCourse();
             $purchased->student_id = $student->id;
             $purchased->course_id = $request->course;
-            $purchased->course_total_amount = $request->course_fee;
+            $purchased->course_total_amount = $courseTotalAmount;
             $purchased->installment = $request->course_installment;
             $purchased->purchased_date = $student->created_at;
             $purchased->save();
@@ -131,9 +135,9 @@ class StudentController extends Controller
         $totalDue = $studentPayments->sum('due_amount'); // Sum up all due amounts
         $totalPaid = $studentPayments->sum('pay_amount');
         $totalamount = 0;
-        foreach ($studentPayments as $studenpayment)
+        foreach ($studentPayments as $studentpayment)
         {
-            $totalamount = $studenpayment->current_installment + $totalDue;
+            $totalamount = $studentpayment->current_installment + $totalDue;
         }
         $totalPaid =  $studentPayments->sum('pay_amount');
         // $monthlyInstallment =  $purchasedCouse->course_total_amount/$purchasedCouse->installment;
@@ -145,7 +149,7 @@ class StudentController extends Controller
         }
      
         $courses = Course::where('status', 1)->pluck('title', 'id')->toArray();
-        return view('admin.pages.students.show', compact('student', 'purchasedCouse', 'wishlistedCousers', 'courses', 'studentPayments', 'totalPaid','monthlyInstallment','totalamount'));
+        return view('admin.pages.students.show', compact('student', 'purchasedCouse', 'wishlistedCousers', 'courses', 'studentPayments', 'totalPaid','monthlyInstallment','totalamount','totalDue'));
     }
 
     /**
@@ -156,11 +160,11 @@ class StudentController extends Controller
      */
     public function edit($id)
     {
-        $student = Student::find($id);
+        $student = Student::with('courses')->find($id);
         $countries = Country::get();
         $batches = Batch::where('status', 1)->get();
         $courses = Course::where('status', 1)->get();
-        $purchasedCousers = StudentPurchasedCourse::where('student_id', $id)->get();
+        $purchasedCousers = StudentPurchasedCourse::with('coursedtls')->where('student_id', $id)->first();
         $wishlistedCousers = StudentWishlistedCourse::where('student_id', $id)->get();
         return view('admin.pages.students.edit', compact('student', 'purchasedCousers', 'wishlistedCousers', 'countries', 'batches', 'courses'));
     }
@@ -174,6 +178,12 @@ class StudentController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $student = Student::find($id);
+        $schemeDtl = Scheme::where('id',$student->scheme_id)->first();
+        $offerPercentage = $schemeDtl->discount; // Assuming this is the offer percentage
+        $courseFee = $request->course_fee;
+        $discountAmount = ($courseFee * $offerPercentage) / 100;
+        $courseTotalAmount = $courseFee - $discountAmount;
         $student = Student::find($id);
         // $student->name = $request->name;
         // $student->last_name = $request->l_name;
@@ -214,12 +224,16 @@ class StudentController extends Controller
             if ($purchased) {
                 // $purchased->students_id = $student->id;
                 $purchased->course_id = $request->course;
+                $purchased->course_total_amount = $courseTotalAmount;
+                $purchased->installment = $request->course_installment;
                 $purchased->purchased_date = $student->created_at;
                 $purchased->save();
             } else {
                 $purchased = new StudentPurchasedCourse();
                 $purchased->student_id = $student->id;
                 $purchased->course_id = $request->course;
+                $purchased->course_total_amount = $courseTotalAmount;
+                $purchased->installment = $request->course_installment;
                 $purchased->purchased_date = $student->created_at;
                 $purchased->save();
             }

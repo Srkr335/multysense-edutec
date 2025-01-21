@@ -405,58 +405,54 @@
     }
 
 
-    // function getCentre() {
-    //     var role = {
-    //         !!auth() - > user() - > roles[0] - > id!!
-    //     };
+    function getCentre() {
+        var role = {!! auth()->user()->roles[0]->id !!};
 
-    //     var courseId = $('#course_id').val();
-    //     if (!courseId) {
-    //         // Clear the categories dropdown if no scheme is selected
-    //         $('#centre_id').html('<option value="">Choose Course</option>');
-    //         return;
-    //     }
+        var courseId = $('#course_id').val();
+        if (!courseId) {
+            // Clear the categories dropdown if no scheme is selected
+            $('#centre_id').html('<option value="">Choose Course</option>');
+            return;
+        }
 
-    //     $.ajax({
-    //         url: "{{ route('admin.student.select_centre') }}",
-    //         method: "get",
-    //         headers: {
-    //             'X-CSRF-TOKEN': '{{ csrf_token() }}'
-    //         },
-    //         data: {
-    //             course_id: courseId,
-    //         },
-    //         success: function(res) {
-    //             console.log(res);
-    //             var options = '<option value="">-- Select --</option>';
-    //             if (role == 2) {
+        $.ajax({
+            url: "{{ route('admin.student.select_centre') }}",
+            method: "get",
+            headers: {
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            },
+            data: {
+                course_id: courseId,
+            },
+            success: function(res) {
+                console.log(res);
+                var options = '<option value="">-- Select --</option>';
+                if (role == 2) {
 
-    //                 res.forEach(function(data) {
-    //                     var centreId = {
-    //                         !!auth() - > user() - > centre ? auth() - > user() - > centre - > id : 0!!
-    //                     };
-    //                     if (centreId == data.centre.id) {
-    //                         options += '<option value="' + data.centre.id + '">' + data.centre.name +
-    //                             '</option>';
-    //                         console.log(options);
-    //                     }
+                    res.forEach(function(data) {
+                        var centreId = {!! auth()->user()->centre ? auth()->user()->centre->id : 0 !!};
+                        if (centreId == data.centre.id) {
+                            options += '<option value="' + data.centre.id + '">' + data.centre.name +
+                                '</option>';
+                            console.log(options);
+                        }
 
-    //                 });
-    //             } else {
+                    });
+                } else {
 
-    //                 res.forEach(function(data) {
-    //                     options += '<option value="' + data.centre.id + '">' + data.centre.name +
-    //                         '</option>';
-    //                 });
-    //             }
-    //             $('#centre_id').html(options);
+                    res.forEach(function(data) {
+                        options += '<option value="' + data.centre.id + '">' + data.centre.name +
+                            '</option>';
+                    });
+                }
+                $('#centre_id').html(options);
 
-    //         },
-    //         error: function(err) {
-    //             console.error(err);
-    //         }
-    //     });
-    // }
+            },
+            error: function(err) {
+                console.error(err);
+            }
+        });
+    }
 
     function getBatch() {
         var centreId = $('#centre_id').val();
