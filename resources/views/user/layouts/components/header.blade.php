@@ -11,23 +11,23 @@
                             <span></span>
                         </span>
                     </a>
-                    <a href="{{ url('/home') }}" class="navbar-brand logo">
-                        <img src="assets/img/logo/logo-five.png" class="img-fluid" alt="Logo">
+                    <a href="{{ url('/home') }}" class=" logo">
+                    <img src="{{ asset('eduimg/favicon.png') }}" alt="Logo">
                     </a>
-                    <ul class="main-nav">
+                    <!-- <ul class="main-nav">
                         <nav class="nav-link header-Link">
                             <a href="{{ url('/home') }}">Home </a>
                             <a href="{{ url('/about') }}">About </a>
                             <a href="{{ url('/Courses') }}">Courses </a>
 
                         </nav>
-                    </ul>
+                    </ul> -->
                 </div>
                 
                 <div class="main-menu-wrapper">
                     <div class="menu-header">
                         <a href="index.html" class="menu-logo">
-                            <img src="assets/img/logo/logo-five.svg" class="img-fluid" alt="Logo">
+                            <img src="{{ asset('assets/img/logo/logo.png') }}" class="img-fluid" alt="Logo">
                         </a>
                         <a id="menu_close" class="menu-close" href="javascript:void(0);">
                             <i class="fas fa-times"></i>
@@ -167,17 +167,19 @@
                                         class="avatar-img rounded-circle">
                                 </div>
                                 <div class="user-text">
-                                    <h6>Rolands R</h6>
-                                    <p class="text-muted mb-0">Student</p>
-                                </div>
+                                <h6>{{ auth()->user()->name }}</h6>
+                                <p class="text-muted mb-0">
+                                    {{ auth()->user()->roles->first()->name ?? 'No Role Assigned' }}
+                                </p>
                             </div>
-                            <a class="dropdown-item" href="{{ url('/user_profile') }}"><i
-                                    class="feather-user me-1"></i> Profile</a>
+
+                            </div>
+                            
 
                             @if (auth()->user())
                                 <a class="dropdown-item" href="{{ route('logout') }}"
                                     onclick="event.preventDefault();
-                      document.getElementById('logout-form').submit();"><i
+                                     document.getElementById('logout-form').submit();"><i
                                         class="feather-log-out me-1"></i>Logout</a>
                                 <form id="logout-form" action="{{ route('logout') }}" method="POST"
                                     class="d-none">

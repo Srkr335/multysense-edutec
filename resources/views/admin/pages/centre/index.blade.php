@@ -1,127 +1,130 @@
 @extends('admin.layouts.admin_app')
 
 @section('content')
-<div class="container-fluid" style="transform: none;">
-    <div class="row" style="transform: none;">
-
+<div class="container-fluid" style="padding: 20px; background-color: #f8f9fa;">
+    <div class="row">
         <div class="col-md-12">
-            <div class="row">
-                <div class="col-md-12">
 
-                    <div class="">
+            <div style="background-color: #ffffff; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); padding: 20px;">
 
-                        <div class="settings-inner-blk p-0">
-                            <div
-                                class="sell-course-head comman-space d-flex justify-content-between align-items-center">
-                                <h3>Services</h3>
-                                <div class="go-dashboard text-center">
-                                    <a href="{{ route('centre.create') }}" class="btn btn-primary">Add Centre</a>
-                                </div>
-                            </div>
-                            <div class="card">
-                                <div class="comman-space pb-0 card-body">
-
-                                    <div class="settings-tickets-blk course-instruct-blk table-responsive">
-
-                                        <table class="table table-nowrap mb-2">
-                                            <thead>
-                                                <tr>
-                                                    <th>Sl.No</th>
-                                                    <th>Name</th>
-                                                    <th>Address</th>
-                                                    <th>Mobile</th>
-                                                    <th>Website</th>
-                                                    <th>Status</th>
-                                                    <th>Action</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <?php $n = 0; ?>
-                                                @foreach ($centers as $center)
-                                                <?php $n++; ?>
-                                                <tr>
-                                                    <td>{{ $n }}</td>
-                                                    <td>{{ $center->name }}</td>
-                                                    <td>{{ $center->address }}</td>
-                                                    <td>{{ $center->mobile }}</td>
-                                                    <td><a href="{{ $center->website }}"
-                                                            target="_blank">{{ $center->website }}</a></td>
-                                                    <td>
-                                                        @if ($center->status == 1)
-                                                        <span class="badge info-low">Enabled</span>
-                                                        @else
-                                                        <span class="badge info-inter">Disabled</span>
-                                                        @endif
-                                                    </td>
-                                                    <td>
-                                                        <a href="{{ route('centre.edit', $center->id) }}"
-                                                            class="btn btn-info text-white">
-                                                            <span class="glyphicon glyphicon-edit"></span> Edit
-                                                        </a>
-                                                        <button type="button" class="btn btn-danger text-white"
-                                                            onclick="confirmDelete({{ $center->id }})">Delete</button>
-                                                    </td>
-                                                </tr>
-                                                @endforeach
-                                                @if ($centers->count() == 0)
-                                                <tr></tr>
-                                                <td colspan="5" class="text-center">No Data Found</td>
-                                                </tr>
-                                                @endif
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="card-footer">
-                                <div class="row">
-                                    <div class="col-xs-12 col-md-6 text-right">
-                                        {{ $centers->links() }}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
+                <!-- Header Section -->
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <h3 style="font-weight: 700; color: #2c3e50; margin: 0;"> Centres Management</h3>
+                    <a href="{{ route('centre.create') }}"
+                        style="background-color: #007bff; color: #fff; padding: 10px 18px; border-radius: 6px; text-decoration: none; font-weight: 600; transition: background 0.3s;">
+                        Add Centre
+                    </a>
                 </div>
+
+                <!-- Table Section -->
+                <div style="overflow-x:auto;">
+                    <table style="width: 100%; border-collapse: collapse; font-size: 15px;">
+                        <thead>
+                            <tr style="background-color: #F04747; color: #fff; text-align: left;">
+                                <th style="padding: 12px;">Sl.No</th>
+                                <th style="padding: 12px;">Name</th>
+                                <th style="padding: 12px;">Address</th>
+                                <th style="padding: 12px;">Mobile</th>
+                                <th style="padding: 12px;">Website</th>
+                                <th style="padding: 12px;">Status</th>
+                                <th style="padding: 12px; text-align: center;">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php $n = 0; ?>
+                            @foreach ($centers as $center)
+                            <?php $n++; ?>
+                            <tr style="border-bottom: 1px solid #ddd; background-color: {{ $n % 2 == 0 ? '#f9f9f9' : '#ffffff' }};">
+                                <td style="padding: 10px;">{{ $n }}</td>
+                                <td style="padding: 10px; font-weight: 600;">{{ $center->name }}</td>
+                                <td style="padding: 10px;">{{ $center->address }}</td>
+                                <td style="padding: 10px;">{{ $center->mobile }}</td>
+                                <td style="padding: 10px;">
+                                    <a href="{{ $center->website }}" target="_blank" style="color: #007bff; text-decoration: none;">
+                                        {{ $center->website }}
+                                    </a>
+                                </td>
+                                <td style="padding: 10px;">
+                                    @if ($center->status == 1)
+                                    <span style="background-color: #28a745; color: white; padding: 5px 10px; border-radius: 5px;">Enabled</span>
+                                    @else
+                                    <span style="background-color: #dc3545; color: white; padding: 5px 10px; border-radius: 5px;">Disabled</span>
+                                    @endif
+                                </td>
+                                <td style="padding: 10px; text-align: center; white-space: nowrap;">
+                                    <div style="display: inline-flex; align-items: center; gap: 8px;">
+                                        <a href="{{ route('centre.edit', $center->id) }}"
+                                            style="background-color: #17a2b8; color: #fff; padding: 6px 14px; border-radius: 5px; 
+                   text-decoration: none; font-weight: 600; display: inline-block; transition: 0.2s;">
+                                            Edit
+                                        </a>
+                                        <button type="button"
+                                            style="background-color: #dc3545; color: #fff; padding: 6px 14px; border-radius: 5px; 
+                   border: none; font-weight: 600; cursor: pointer; display: inline-block; transition: 0.2s;">
+                                            Delete
+                                        </button>
+                                    </div>
+                                </td>
+
+                            </tr>
+                            @endforeach
+
+                            @if ($centers->count() == 0)
+                            <tr>
+                                <td colspan="7" style="text-align:center; padding: 20px; color: #6c757d;">No Data Found</td>
+                            </tr>
+                            @endif
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Pagination -->
+                <div style="margin-top: 20px; text-align: right;">
+                    {{ $centers->links() }}
+                </div>
+
             </div>
         </div>
-
     </div>
 </div>
+
 <!-- Delete Confirmation Modal -->
-<div class="modal fade" id="confirmDeleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-    aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Confirm Delete</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
+<div id="confirmDeleteModal"
+    style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+           background: rgba(0,0,0,0.5); z-index: 1050; justify-content: center; align-items: center;">
+    <div style="background: #fff; width: 400px; border-radius: 10px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.3);">
+        <div style="background-color: #dc3545; color: #fff; padding: 15px 20px;">
+            <h5 style="margin: 0;">⚠️ Confirm Delete</h5>
+        </div>
+        <div style="padding: 20px; font-size: 16px; color: #333;">
+            Are you sure you want to delete this centre? This action cannot be undone.
+        </div>
+        <div style="padding: 10px 20px; text-align: right; border-top: 1px solid #eee;">
+            <button type="button" onclick="closeModal()"
+                style="background-color: #6c757d; color: #fff; padding: 8px 14px; border: none; border-radius: 6px; font-weight: 600; margin-right: 8px; cursor: pointer;">
+                Cancel
+            </button>
+            <form id="deleteForm" method="POST" action="{{ route('admin.centre.delete') }}" style="display: inline;">
+                @csrf
+                <input type="hidden" name="centre_id" id="centre_id">
+                <button type="submit"
+                    style="background-color: #dc3545; color: #fff; padding: 8px 14px; border: none; border-radius: 6px; font-weight: 600; cursor: pointer;">
+                    Delete
                 </button>
-            </div>
-            <div class="modal-body">
-                Are you sure you want to delete this item?
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                <form id="deleteForm" method="POST" action=" {{ route('admin.centre.delete') }}">
-                    @csrf
-                    <input type="hidden" name="centre_id" id="centre_id">
-                    <button type="submit" class="btn btn-danger">Delete</button>
-                </form>
-            </div>
+            </form>
         </div>
     </div>
 </div>
+
 <script type="text/javascript">
-function confirmDelete(id) {
-    var form = document.getElementById('deleteForm');
-    $('#confirmDeleteModal').modal('show');
-    $('#centre_id').val(id);
+    function confirmDelete(id) {
+        document.getElementById('centre_id').value = id;
+        document.getElementById('confirmDeleteModal').style.display = 'flex';
+    }
 
-}
+    function closeModal() {
+        document.getElementById('confirmDeleteModal').style.display = 'none';
+    }
 </script>
-
 
 @endsection

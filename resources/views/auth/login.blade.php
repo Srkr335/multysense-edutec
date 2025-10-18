@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
     <title>ICP Fitness</title>
 
-    <link rel="shortcut icon" type="image/x-icon" href="{{ asset('img/favicon.svg') }}">
+    <link rel="shortcut icon" type="image/x-icon" href="{{ asset('eduimg/edutec.png') }}">
 
     <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
 
@@ -32,28 +32,28 @@
                 <div class="owl-carousel login-slide owl-theme">
                     <div class="welcome-login">
                         <div class="login-banner">
-                            <img src="{{ asset('img/img/login1.png') }}" class="img-fluid" alt="Logo">
+                            <img src="{{ asset('eduimg/about_post2.jpg') }}" class="img-fluid" alt="Logo">
+                        </div>
+                       <div class="mentor-course text-center"> 
+    <h2>Welcome to <br> <span style="color: red;">MULTYSENSE EDU TECH</span></h2>
+</div>
+
+                    </div>
+                    <div class="welcome-login">
+                        <div class="login-banner">
+                            <img src="{{ asset('eduimg/logo.png') }}" class="img-fluid" alt="Logo">
                         </div>
                         <div class="mentor-course text-center">
-                            <h2>Welcome to <br> Wealthmaxima College Of Advanced Studies</h2>
-                            
+                        <h2>Welcome to <br>  <span style="color: red;">MULTYSENSE EDU TECH</span></h2>
                         </div>
                     </div>
                     <div class="welcome-login">
                         <div class="login-banner">
-                            <img src="{{ asset('img/img/query.png') }}" class="img-fluid" alt="Logo">
-                        </div>
-                        <div class="mentor-course text-center">
-                        <h2>Welcome to <br> Wealthmaxima College Of Advanced Studies</h2>
-                        </div>
-                    </div>
-                    <div class="welcome-login">
-                        <div class="login-banner">
-                            <img src="{{ asset('img/img/login3.png') }}" class="img-fluid" alt="Logo"
+                            <img src="{{ asset('eduimg/edutec.png') }}" class="img-fluid" alt="Logo"
                                 max-width="300px !important">
                         </div>
                         <div class="mentor-course text-center">
-                        <h2>Welcome to <br> Wealthmaxima College Of Advanced Studies</h2>
+                        <h2>Welcome to <br>  <span style="color: red;">MULTYSENSE EDU TECH</span></h2>
                         </div>
                     </div>
                 </div>
@@ -65,7 +65,7 @@
                     <div class="loginbox">
                         <div class="w-100">
                             <div class="img-logo">
-                                <img src="{{ asset('img/logo/logo.png') }}" class="img-fluid" alt="Logo">
+                                <img src="{{asset('eduimg/logo.png') }}" class="img-fluid" alt="Logo">
 
 
                             </div>

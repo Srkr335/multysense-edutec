@@ -142,4 +142,9 @@ class QuizController extends Controller
 
         return back()->with('success', 'File imported successfully!');
     }
+    public function getbatchs($course_id)
+    {
+        $batches = Batch::where('course_id', $course_id)->get();
+        return response()->json($batches);
+    }
 }

@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use App\Models\Batch;
 use App\Models\Course;
 use App\Models\Centre;
+use App\Models\CourseCentre;
+
 
 class BatchController extends Controller
 {
@@ -45,8 +47,8 @@ class BatchController extends Controller
         $batch = new Batch();
         $batch->name = $request->batch_name;
         $batch->course_id  = $request->course_name;
-        $batch->year = $request->batch_year;
-        $batch->month = $request->batch_month;
+        $batch->start_date = $request->start_date;
+        $batch->end_date = $request->end_date;
         $batch->centre_id  = $request->centre_name;
         $batch->status = $request->status;
         $batch->save();
@@ -113,5 +115,11 @@ class BatchController extends Controller
         $batch = Batch::findOrFail($request->batch_id);
         $batch->delete();
         return redirect()->route('batch.index')->with('success', 'Batch deleted successfully');
+    }
+    public function getCoursesByCentre($centreId)
+    {
+        $courseIds = CourseCentre::where('centre_id', $centreId)->pluck('course_id');
+        $courses = Course::whereIn('id', $courseIds)->get(['id', 'title']);
+        return response()->json($courses);
     }
 }

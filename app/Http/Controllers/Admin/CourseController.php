@@ -2,19 +2,21 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
-use App\Models\Category;
+use App\Models\Batch;
+use App\Models\Centre;
 use App\Models\Course;
-use App\Models\CoursePlaylist;
-use App\Models\CoursePricing;
-use App\Models\CourseStudyMaterial;
+use App\Models\Category;
+use App\Models\Duration;
 use App\Models\CourseTag;
 use App\Models\CourseTutor;
-use App\Models\Centre;
 use App\Models\CourseCentre;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
+use App\Models\CoursePricing;
+use App\Models\CoursePlaylist;
 use Yajra\DataTables\DataTables;
+use App\Models\CourseStudyMaterial;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Validator;
 
 class CourseController extends Controller
 {
@@ -70,8 +72,22 @@ class CourseController extends Controller
                     return $row->status === 1 ? '<span class="badge info-low">Active</span>' : '<span class="badge info-inter">Inactive</span>';
                 })
                 ->addColumn('action', function ($row) {
-                    return '<a href="' .   route("admin.course.study-materials", $row->id) . '" class="edit btn btn-info btn-sm">Study Materials</a> <a href="' .   route("admin.course.edit", $row->id) . '" class="edit btn btn-primary btn-sm">Edit</a>';
+                    return '
+        <div style="display: flex; justify-content: center; align-items: center; gap: 6px;">
+            <a href="' . route("admin.course.study-materials", $row->id) . '" 
+               class="btn btn-info btn-sm" 
+               style="font-weight: 600; padding: 6px 10px; border-radius: 5px;">
+               Study Materials
+            </a>
+            <a href="' . route("admin.course.edit", $row->id) . '" 
+               class="btn btn-primary btn-sm" 
+               style="font-weight: 600; padding: 6px 10px; border-radius: 5px;">
+               Edit
+            </a>
+        </div>
+    ';
                 })
+
                 ->rawColumns(['image', 'level', 'category', 'status', 'action'])
                 ->make(true);
         }
@@ -86,7 +102,32 @@ class CourseController extends Controller
     {
         $categories = Category::get();
         $centres = Centre::where('status', 1)->get();
-        return view('admin.pages.course.create', compact('categories', 'centres'));
+        $durations = Duration::where('status', 1)->get(); // ✅ add this
+
+        return view('admin.pages.course.create', compact('categories', 'centres', 'durations'));
+    }
+    public function storeDuration(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'months' => 'nullable|integer|min:1',
+            'status' => 'required|in:0,1',
+        ]);
+
+        $duration = Duration::create([
+            'name' => $request->name,
+            'months' => $request->months,
+            'status' => $request->status,
+        ]);
+
+        if ($request->ajax()) {
+            return response()->json([
+                'success' => true,
+                'id' => $duration->id,
+                'name' => $duration->name,
+                'message' => 'Duration added successfully!',
+            ]);
+        }
     }
 
     /**
@@ -131,11 +172,13 @@ class CourseController extends Controller
         $course->save();
 
 
-        foreach ($request->centre_name as $centreName) {
-            $centre = new CourseCentre();
-            $centre->course_id = $course->id;
-            $centre->centre_id = $centreName;
-            $centre->save();
+        if (!empty($request->centre_name)) {
+            foreach ($request->centre_name as $centreId) {
+                CourseCentre::create([
+                    'course_id' => $course->id,
+                    'centre_id' => $centreId,
+                ]);
+            }
         }
 
         $coursePLaylist = new CoursePlaylist();
@@ -190,6 +233,7 @@ class CourseController extends Controller
         return redirect()->route('admin.course.index')->with('success', 'Course saved successfully');
     }
 
+
     /**
      * Display the specified resource.
      *
@@ -212,10 +256,12 @@ class CourseController extends Controller
         $categories = Category::get();
         $course = Course::find($id);
         $centres = Centre::where('status', 1)->get();
+        $durations = Duration::where('status', 1)->get(); // ✅ add this
+
 
         // $centres = Centre::where('status',1)->get();
 
-        return view('admin.pages.course.edit', compact('categories', 'course', 'centres'));
+        return view('admin.pages.course.edit', compact('categories', 'course', 'centres', 'durations'));
     }
 
     /**
@@ -355,5 +401,12 @@ class CourseController extends Controller
         $material = CourseStudyMaterial::find($id);
         $material->delete();
         return redirect()->back()->with('success', 'Study material deleted successfully');
+    }
+    public function getBatches(Request $request)
+    {
+        $courseId = $request->course_id;
+        $batches = Batch::where('course_id', $courseId)->where('status', 1)->get();
+
+        return response()->json(['batches' => $batches]);
     }
 }

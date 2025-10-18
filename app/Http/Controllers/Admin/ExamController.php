@@ -144,4 +144,10 @@ class ExamController extends Controller
         $exam->delete();
         return redirect()->route('exam.index')->with('success','Exam details deleted successfully');
     }
+    public function getBatchesByCourse(Request $request)
+    {
+        $courseId = $request->course_id;
+        $batches = Batch::where('course_id', $courseId)->where('status', 1)->get(['id', 'name']);
+        return response()->json($batches);
+    }
 }

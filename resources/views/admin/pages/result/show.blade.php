@@ -26,49 +26,47 @@
                                                 <thead>
                                                     <tr>
                                                         <th>Sl.No</th>
+                                                        <th>Centre</th>
                                                         <th>Reg No</th>
                                                         <th>Student Name</th>
                                                         <th>Marks</th>
                                                         <th>Percentage</th>
                                                         <th>Grade</th>
                                                         <th>Result</th>
+                                                        <th>Action</th>
                                                     </tr>
                                                 </thead>
-                                                <tbody>
-                                                    <?php $n = 0; ?>
-                                                    @foreach ($results as $result)
-                                                        <?php $n++; ?>
-                                                        <tr>
-                                                            <td>{{ $n }}</td>
-                                                            <td>{{ $result->reg_no }}</td>
-                                                            <td>{{ $result->student->studentname->name }}</td>
-                                                            <td>{{ $result->marks }}</td>
-                                                            <td>{{ $result->percentage }}</td>
-                                                            <td>{{ $result->grade }}</td>
-                                                            <td>
-                                                                @if ($result->status == "Pass")
-                                                                <span class="badge badge-success">Pass</span>
-                                                                @else
-                                                                <span class="badge badge-danger">Fail</span>
-                                                                @endif
-                                                            </td>
-                                                            <!-- <td>
-                                                                <a href="{{ route('exam_result.show', $result->id) }}"
-                                                                    class="btn btn-info text-white">
-                                                                    <span class="glyphicon glyphicon-edit"></span> View
-                                                                </a>
-                                                                <button type="button" class="btn btn-danger text-white"
-                                                                onclick="confirmDelete({{ $result->id }})">Delete</button>
-                                                            </td> -->
-                                                        </tr>
-                                                    @endforeach
-                                                    @if ($results->count() == 0)
-                                                        <tr></tr>
-                                                        <td colspan="6" class="text-center">No Data Found</td>
-                                                        </tr>
-                                                    @endif
-                                                </tbody>
-                                            </table>
+                                               <tbody>
+                    @forelse ($results as $result)
+                        <tr>
+                        <td>{{ $loop->iteration }}</td>
+                        <td>{{ $result->exam->centre->name ?? 'N/A' }}</td>
+                        <td>{{ $result->reg_no }}</td>
+                        <td>{{ $result->student->studentname->name }}</td>
+                        <td>{{ $result->marks }}</td>
+                        <td>{{ $result->percentage }}</td>
+                        <td>{{ $result->grade }}</td>
+                        <td>
+                            <span class="badge badge-{{ $result->status === 'Pass' ? 'success' : 'danger' }}">
+                            {{ $result->status }}
+                            </span>
+                        </td>
+                        <td>
+                        <a href="{{ route('certificate.generate', $result->student_id) }}" target="_blank"
+                        class="btn btn-sm btn-outline-primary d-flex align-items-center"style=" height: 25px;" title="Download Certificate">
+                            <span class=" ms-2" >Download</span>
+                            <i class="fas fa-arrow-down ms-2"></i>
+                             </a>
+
+                        </td>
+                        </tr>
+                         @empty
+                        <tr>
+                        <td colspan="8" class="text-center">No Data Found</td>
+                        </tr>
+                         @endforelse
+                        </tbody>
+                                </table>
                                         </div>
                                     </div>
                                 </div>

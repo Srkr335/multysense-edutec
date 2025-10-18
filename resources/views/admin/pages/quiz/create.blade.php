@@ -32,10 +32,10 @@
                             <div class="checkout-form personal-address add-course-info ">
                                 <form action="#">
                                     <div class="row">
-                                        <div class="form-group col-md-6">
+                                        <!-- <div class="form-group col-md-6">
                                             <label class="add-course-label">Course <span
                                                     class="text-danger">*</span></label>
-                                            <select class="form-control select" name="course_id" required>
+                                            <select class="form-control select" id="courseSelect" name="course_id" required>
                                                 <option value="">Select a Course</option>
                                                 @foreach ($courses as $course)
                                                     <option value="{{ $course->id }}">{{ $course->title }}</option>
@@ -46,8 +46,23 @@
                                                     {{ $errors->first('course_id') }}
                                                 </span>
                                             @endif
+                                        </div> -->
+                                        <div class="col-lg-6">
+                                            <div class="form-group">
+                                                <label class="form-control-label">Course</label>
+                                                <select id="courseSelect" name="course_id" class="form-control">
+                                                    <option value=''>Select Course</option>
+                                                    @foreach($courses as $course)
+                                                        <option value="{{ $course->id }}">{{ $course->title }}</option>
+                                                    @endforeach
+                                                </select>
+                                                @if ($errors->has('course_id'))
+                                                    <span class="text-sm text-danger">{{ $errors->first('course_id') }}</span>
+                                                @endif
+                                            </div>
                                         </div>
-                                        <div class="col-md-6">
+
+                                        <!-- <div class="col-md-6">
                                             <div class="form-group">
                                                 <label class="form-control-label">Batch<span
                                                 class="text-danger">*</span></label>
@@ -62,6 +77,18 @@
                                                     {{ $errors->first('course_id') }}
                                                 </span>
                                             @endif
+                                            </div>
+                                        </div> -->
+                                        <div class="col-lg-6">
+                                            <div class="form-group">
+                                                <label class="form-control-label">Batch</label>
+                                                <select id="batchSelect" name="batch_id" class="form-control">
+                                                    <option value=''>Select Batch</option>
+                                                    {{-- Batches will be loaded via AJAX --}}
+                                                </select>
+                                                @if ($errors->has('batch_id'))
+                                                    <span class="text-sm text-danger">{{ $errors->first('batch_id') }}</span>
+                                                @endif
                                             </div>
                                         </div>
                                         <div class="col-md-6">
@@ -168,4 +195,32 @@
         </div>
 
     </div>
+    <script>
+        $(document).ready(function()  {
+            $('#courseSelect').on('change', function() {
+                var courseId = $(this).val();
+                $('#batchSelect').html('<option value="">Loading Batches...</option>');
+
+                if (courseId) {
+                    $.ajax({
+                        url: "{{ url('get-batches') }}/" + courseId,
+                        type: "GET",
+                        success: function(res) {
+                            let options = '<option value="">Select Batch</option>';
+                            res.forEach(function(batch) {
+                                options += `<option value="${batch.id}">${batch.name}</option>`;
+                            });
+                            $('#batchSelect').html(options);
+                        },
+                        error: function(xhr, status, error) {
+                            console.error("Error fetching batches:", error);
+                            $('#batchSelect').html('<option value="">No Batches Found</option>');
+                        }
+                    });
+                } else {
+                    $('#batchSelect').html('<option value="">Select Course First</option>');
+                }
+            });
+        });
+    </script>
 @endsection

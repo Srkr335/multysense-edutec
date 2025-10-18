@@ -46,7 +46,7 @@
                                                 name="batch_name" id="batch_name" value="{{$batch->name}}">
                                         </div>
                                     </div>
-                                    <div class="col-lg-6">
+                                    <!-- <div class="col-lg-6">
                                         <div class="form-group">
                                             <label class="form-label">Course</label>
                                             <select class="form-select select country-select select2-hidden-accessible"
@@ -60,7 +60,35 @@
                                                 @endforeach
                                             </select>
                                         </div>
+                                    </div> -->
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <label class="form-control-label">Centre</label>
+                                            <select class="form-select" name="centre_name" id="centre_select">
+                                                <option value="">Select Centre</option>
+                                                @foreach($centres as $centre)
+                                                    <option value="{{ $centre->id }}" {{ $batch->centre_id == $centre->id ? 'selected' : '' }}>
+                                                        {{ $centre->name }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        </div>
                                     </div>
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <label class="form-label">Course</label>
+                                            <select class="form-select" name="course_name" id="course_select">
+                                                <option value="">Select Course</option>
+                                                @foreach($courses as $course)
+                                                    <option value="{{ $course->id }}" {{ $batch->course_id == $course->id ? 'selected' : '' }}>
+                                                        {{ $course->title }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                            <small class="text-warning">{{ $errors->first('course_name') }}</small>
+                                        </div>
+                                    </div>
+
                                     <!-- <div class="col-lg-3">
                                         <div class="form-group">
                                             <label class="form-control-label">Year</label>
@@ -87,7 +115,7 @@
                                                 value="{{ $batch->end_date }}">
                                         </div>
                                     </div>
-                                    <div class="col-lg-6">
+                                    <!-- <div class="col-lg-6">
                                         <div class="form-group">
                                             <label class="form-control-label">Centre</label>
                                             <select class="form-select select country-select select2-hidden-accessible"
@@ -101,7 +129,7 @@
                                                 @endforeach
                                             </select>
                                         </div>
-                                    </div>
+                                    </div> -->
                                     <div class="col-lg-6">
                                         <div class="form-group">
                                             <label class="form-label">Status</label>
@@ -126,4 +154,27 @@
 
     </div>
 </div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $('#centre_select').on('change', function () {
+        var centreId = $(this).val();
+        $('#course_select').empty().append('<option value="">Loading...</option>');
+
+        if (centreId) {
+            $.ajax({
+                url: "{{ url('/get-courses-by-centre') }}/" + centreId,
+                type: 'GET',
+                success: function (response) {
+                    $('#course_select').empty().append('<option value="">Select Course</option>');
+                    $.each(response, function (key, course) {
+                        $('#course_select').append('<option value="' + course.id + '">' + course.title + '</option>');
+                    });
+                }
+            });
+        } else {
+            $('#course_select').empty().append('<option value="">Select Course</option>');
+        }
+    });
+</script>
 @endsection

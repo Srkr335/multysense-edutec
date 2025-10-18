@@ -114,7 +114,7 @@
                                                 name="module_name" required>
                                         </div>
                                     </div>
-                                    <div class="col-lg-6">
+                                    <!-- <div class="col-lg-6">
                                         <div class="form-group">
                                             <label class="form-control-label">Course</label>
                                             <select class="form-control" name="course" id="course">
@@ -133,6 +133,26 @@
                                                 @foreach($batches as $batch)
                                                 <option value="{{ $batch->id }}">{{ $batch->name }}</option>
                                                 @endforeach
+                                            </select>
+                                        </div>
+                                    </div> -->
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <label class="form-control-label">Course</label>
+                                                <select class="form-select" name="course" id="courseSelect">
+                                                <option value=''>Select Course</option>
+                                                @foreach($courses as $course)
+                                                    <option value="{{ $course->id }}">{{ $course->title }}</option>
+                                                @endforeach    
+                                            </select>
+                                        </div>  
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <label class="form-control-label">Batch</label>
+                                                <select class="form-select" name="batch" id="batchSelect">
+                                                <option value=''>Select Batch</option>
+                                                {{-- Batches will be loaded via AJAX --}}
                                             </select>
                                         </div>
                                     </div>
@@ -155,4 +175,35 @@
 
         </div>
     </div>
+
+    <script>
+    $(document).ready(function() {
+        $('#courseSelect').on('change', function() {
+            var courseId = $(this).val();
+
+            // Show loading message while fetching
+            $('#batchSelect').html('<option value="">Loading...</option>');
+
+            if (courseId) {
+                $.ajax({
+                    url: "/get-batches/" + courseId,
+                    type: "GET",
+                    success: function(res) {
+                        let options = '<option value="">Select Batch</option>';
+                        res.forEach(function(batch) {
+                            options += `<option value="${batch.id}">${batch.name}</option>`;
+                        });
+                        $('#batchSelect').html(options);
+                    },
+                    error: function(err) {
+                        console.error("Error fetching batches:", err);
+                        $('#batchSelect').html('<option value="">No Batch Found</option>');
+                    }
+                });
+            } else {
+                $('#batchSelect').html('<option value="">Select Course First</option>');
+            }
+        });
+    });
+    </script>
 @endsection

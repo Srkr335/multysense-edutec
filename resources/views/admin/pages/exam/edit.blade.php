@@ -128,7 +128,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="row">
+                                <!-- <div class="row">
                                     <div class="col-lg-6">
                                         <div class="form-group">
                                             <label class="form-control-label">Course</label>
@@ -150,6 +150,30 @@
                                                     @foreach($batches as $batch)
                                                     <option value="{{$batch->id}}" {{$exam->batch_id == $batch->id ? 'selected' : ''}}>{{$batch->name}}</option>
                                                     @endforeach    
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div> -->
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <label class="form-control-label">Course</label>
+                                           <select id="courseSelect" name="course_id" class="form-control">
+                                                <option value="">-- Select Course --</option>
+                                                @foreach($courses as $course)
+                                                    <option value="{{ $course->id }}" {{ $exam->course_id == $course->id ? 'selected' : '' }}>
+                                                        {{ $course->title }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <label class="form-control-label">Batch</label>
+                                            <select class="form-select" name="batch_name" id="batchSelect">
+                                                <option value=''>Select Batch</option>
+                                                {{-- Batches will be loaded via AJAX --}}
                                             </select>
                                         </div>
                                     </div>
@@ -227,35 +251,52 @@
 
         </div>
     </div>
-    <script>
-    const checkAll = document.getElementById('checkAllModules');
-    const moduleCheckboxes = document.querySelectorAll('.module-checkbox');
-    checkAll.addEventListener('change', function() {
-        moduleCheckboxes.forEach(function(checkbox) {
-            checkbox.checked = checkAll.checked;
-        });
-    });
+  <script>
+$(document).ready(function () {
+    const selectedCourseId = "{{ $exam->course_id }}";
+    const selectedBatchId = "{{ $exam->batch_id }}";
+    const selectedCentreId = "{{ $exam->exam_centre_id }}";
 
-    function updateCheckAllStatus() {
-        const allChecked = Array.from(moduleCheckboxes).every(function(checkbox) {
-            return checkbox.checked;
-        });
+    // Load batches based on course + centre
+    function loadBatches(centreId, courseId, selectedBatchId = null) {
+        $('#batchSelect').html('<option value="">Loading...</option>');
 
-        checkAll.checked = allChecked;
+        if (centreId && courseId) {
+            $.ajax({
+                url: `/get-batches-by-course/${centreId}`,
+                type: "GET",
+                data: { course_id: courseId },
+                success: function (res) {
+                    let options = '<option value="">Select Batch</option>';
+                    res.forEach(function (batch) {
+                        options += `<option value="${batch.id}" ${
+                            selectedBatchId == batch.id ? 'selected' : ''
+                        }>${batch.name}</option>`;
+                    });
+                    $('#batchSelect').html(options);
+                },
+                error: function (err) {
+                    console.error("Error fetching batches:", err);
+                    $('#batchSelect').html('<option value="">No Batch Found</option>');
+                },
+            });
+        } else {
+            $('#batchSelect').html('<option value="">Select Centre & Course</option>');
+        }
     }
 
-    moduleCheckboxes.forEach(function(checkbox) {
-        checkbox.addEventListener('change', function() {
-            updateCheckAllStatus();
-        });
-    });
-
-    function toggleAllCheckboxes(source) {
-        const checkboxes = document.querySelectorAll('.module-checkbox');
-        checkboxes.forEach((checkbox) => {
-            checkbox.checked = source.checked;
-        });
+    // ✅ On page load (edit mode)
+    if (selectedCentreId && selectedCourseId) {
+        loadBatches(selectedCentreId, selectedCourseId, selectedBatchId);
     }
+
+    // ✅ When course or centre changes
+    $('#courseSelect, [name="centre_name"]').on('change', function () {
+        const courseId = $('#courseSelect').val();
+        const centreId = $('[name="centre_name"]').val();
+        loadBatches(centreId, courseId);
+    });
+});
 </script>
-
+    
 @endsection

@@ -45,7 +45,7 @@
                                                 name="batch_name" id="batch_name">
                                         </div>
                                     </div>
-                                    <div class="col-lg-6">
+                                    <!-- <div class="col-lg-6">
                                         <div class="form-group">
                                             <label class="form-label">Course</label>
                                             <select class="form-select select country-select select2-hidden-accessible"
@@ -56,7 +56,29 @@
                                                 @endforeach
                                             </select>
                                         </div>
+                                    </div> -->
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <label class="form-control-label">Centre</label>
+                                        <select class="form-select" name="centre_name" id="centre_select">
+                                            <option value="">Select Centre</option>
+                                            @foreach($centres as $centre)
+                                                <option value="{{$centre->id}}">{{$centre->name}}</option>
+                                            @endforeach
+                                        </select>
+                                            <smell class="text-warning">{{ $errors->first('centre_name') }}</smell>
+                                        </div>
                                     </div>
+                                        <div class="col-lg-6">
+                                            <div class="form-group">
+                                               <label class="form-label">Course</label>
+                                        <select class="form-select" name="course_name" id="course_select">
+                                        <option value="">Select Course</option>
+                                        </select>
+                                            <small class="text-warning">{{ $errors->first('course_name') }}</small>
+                                        </div>
+                                    </div>
+
                                     <!-- <div class="col-lg-4">
                                         <div class="form-group">
                                             <label class="form-control-label">Year</label>
@@ -73,17 +95,17 @@
                                         <div class="form-group">
                                             <label class="form-control-label">Start Date</label>
                                             <input type="date" class="form-control" placeholder="Enter your Batch Name"
-                                                name="batch_name" id="batch_name">
+                                                name="start_date" id="start_date">
                                         </div>
                                     </div>
                                     <div class="col-lg-3">
                                         <div class="form-group">
                                             <label class="form-control-label">End Date</label>
                                             <input type="date" class="form-control" placeholder="Enter your Batch Name"
-                                                name="batch_name" id="batch_name">
+                                                name="end_date" id="end_date">
                                         </div>
                                     </div>
-                                    <div class="col-lg-6">
+                                    <!-- <div class="col-lg-6">
                                         <div class="form-group">
                                             <label class="form-control-label">Centre</label>
                                             <select class="form-select select country-select select2-hidden-accessible"
@@ -94,7 +116,7 @@
                                                 @endforeach
                                             </select>
                                         </div>
-                                    </div>
+                                    </div> -->
                                     <div class="col-lg-6">
                                         <div class="form-group">
                                             <label class="form-label">Status</label>
@@ -117,4 +139,38 @@
 
     </div>
 </div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#centre_select').on('change', function () {
+            var centreId = $(this).val();
+
+            // Show loading option
+            $('#course_select').html('<option value="">Loading...</option>');
+
+            if (centreId) {
+                $.ajax({
+                    url: "{{ url('/get-courses-by-centre') }}/" + centreId,
+                    type: "GET",
+                    data: {
+                        centre_id: centreId
+                    },
+                    dataType: "json",
+                    success: function (response) {
+                        $('#course_select').empty().append('<option value="">Select Course</option>');
+                        $.each(response, function (index, course) {
+                            $('#course_select').append('<option value="' + course.id + '">' + course.title + '</option>');
+                        });
+                    },
+                    error: function () {
+                        $('#course_select').html('<option value="">Failed to load courses</option>');
+                    }
+                });
+            } else {
+                $('#course_select').html('<option value="">Select Course</option>');
+            }
+        });
+    });
+</script>
 @endsection

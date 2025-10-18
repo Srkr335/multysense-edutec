@@ -134,11 +134,37 @@
                                             <input type="text" class="form-control" placeholder="Enter your City"
                                                 name="city">
                                         </div>
+                                                                            </div>
+
+                                    <div class="form-group">
+                                        <label class="form-control-label">District</label>
+                                        <select name="district" class="form-control" required>
+                                            <option value="">-- Select District --</option>
+                                            <option value="01">Thiruvananthapuram</option>
+                                            <option value="02">Kollam</option>
+                                            <option value="03">Pathanamthitta</option>
+                                            <option value="04">Alappuzha</option>
+                                            <option value="05">Kottayam</option>
+                                            <option value="06">Idukki</option>
+                                            <option value="07">Ernakulam</option>
+                                            <option value="08">Thrissur</option>
+                                            <option value="09">Palakkad</option>
+                                            <option value="10">Malappuram</option>
+                                            <option value="11">Kozhikode</option>
+                                            <option value="12">Wayanad</option>
+                                            <option value="13">Kannur</option>
+                                            <option value="14">Kasaragod</option>
+                                        </select>
                                     </div>
+
+
+
+
+
                                     <div class="col-lg-6">
                                         <div class="form-group">
-                                            <label class="form-control-label">ZipCode</label>
-                                            <input type="text" class="form-control" placeholder="Enter your Zipcode"
+                                            <label class="form-control-label">PinCode</label>
+                                            <input type="text" class="form-control" placeholder="Enter your PinCode"
                                                 name="zipcode">
                                         </div>
                                     </div>
@@ -154,6 +180,7 @@
                                             <label class="form-control-label">Email</label>
                                             <input type="email" class="form-control" placeholder="Enter your Email"
                                                 name="email" required>
+                                                <small class="text-warning">{{$errors->first('email')}}</small>
                                         </div>
                                     </div>
                                     <div class="col-lg-6">

@@ -33,6 +33,23 @@
                                 <form action="#">
                                     <div class="row">
 
+                                        <!-- <div class="form-group col-md-6">
+                                            <label class="add-course-label">Course <span
+                                                    class="text-danger">*</span></label>
+                                            <select class="form-control select" id="courseSelect" name="course_id" required>
+                                                <option value="">Select a Course</option>
+                                                @foreach ($courses as $course)
+                                                    <option value="{{ $course->id }}"
+                                                        @if ($quiz->course_id == $course->id) selected @endif>
+                                                        {{ $course->title }}</option>
+                                                @endforeach
+                                            </select>
+                                            @if ($errors->has('course_id'))
+                                                <span class="text-sm text-danger">
+                                                    {{ $errors->first('course_id') }}
+                                                </span>
+                                            @endif
+                                        </div> -->
                                         <div class="form-group col-md-6">
                                             <label class="add-course-label">Course <span
                                                     class="text-danger">*</span></label>
@@ -50,7 +67,7 @@
                                                 </span>
                                             @endif
                                         </div>
-                                        <div class="col-md-6">
+                                        <!-- <div class="col-md-6">
                                             <div class="form-group">
                                                 <label class="form-control-label">Batch<span
                                                 class="text-danger">*</span></label>
@@ -65,6 +82,18 @@
                                                     {{ $errors->first('course_id') }}
                                                 </span>
                                             @endif
+                                            </div>
+                                        </div> -->
+                                        <div class="col-lg-6">
+                                            <div class="form-group">
+                                                <label class="form-control-label">Batch</label>
+                                                <select id="batchSelect" name="batch_id" class="form-control">
+                                                    <option value=''>Select Batch</option>
+                                                    {{-- Batches will be loaded via AJAX --}}
+                                                </select>
+                                                @if ($errors->has('batch_id'))
+                                                    <span class="text-sm text-danger">{{ $errors->first('batch_id') }}</span>
+                                                @endif
                                             </div>
                                         </div>
                                         <div class="col-md-6">
@@ -176,4 +205,39 @@
         </div>
 
     </div>
+    @push('scripts')
+        <script>
+            $(document).ready(function () {
+                const courseSelect = $('select[name="course_id"]');
+                const batchSelect = $('select[name="batch_id"]');
+                const selectedBatchId = "{{ $quiz->batch_id }}";
+
+                function fetchBatches(courseId) {
+                    $.ajax({
+                        url: "{{ url('get-batches') }}/" + courseId,
+                        type: 'GET',
+                        success: function (batches) {
+                            let options = '<option value="">Select Batch</option>';
+                            $.each(batches, function (key, batch) {
+                                options += `<option value="${batch.id}" ${batch.id == selectedBatchId ? 'selected' : ''}>${batch.name}</option>`;
+                            });
+                            batchSelect.html(options);
+                        }
+                    });
+                }
+
+                // Initial load (edit mode)
+                const currentCourseId = courseSelect.val();
+                if (currentCourseId) {
+                    fetchBatches(currentCourseId);
+                }
+
+                // On course change
+                courseSelect.on('change', function () {
+                    fetchBatches($(this).val());
+                });
+            });
+        </script>
+    @endpush
+
 @endsection

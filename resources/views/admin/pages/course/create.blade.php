@@ -134,16 +134,16 @@
                                             </select>
 
                                         </div>
-                                        <div class="form-group col-md-6">
-                                            <label class="add-course-label">Duration <span
-                                                    class="text-danger">*</span></label>
-                                            <select class="form-control select" name="duration">
-                                                <option value="">Select</option>
-                                                <option value="1">1 Year</option>
-                                                <option value="2">6 Month</option>
-                                                <option value="3">8 Month</option>
-                                            </select>
-                                        </div>
+                                       <div class="form-group col-md-6">
+                                    <label class="add-course-label">Duration <span class="text-danger">*</span></label>
+                                    <select class="form-control select" name="duration" id="durationSelect">
+                                        <option value="">Select</option>
+                                        @foreach($durations as $duration)
+                                            <option value="{{ $duration->id }}">{{ $duration->name }}</option>
+                                        @endforeach 
+                                    </select>
+                                </div>
+
                                         <div class="form-group col-md-6">
                                             <label class="add-course-label">Module Count</label>
                                             <input type="text" class="form-control" placeholder="Module Count"
@@ -174,7 +174,7 @@
                                         {{-- </form> --}}
                                     </div>
                                     <div class="widget-btn">
-                                        <a class="btn btn-secondary">Back</a>
+                            <a href="{{ route('admin.course.index') }}" class="btn btn-black">Back to Course</a>
                                         <a class="btn btn-info-light next_btn">Continue</a>
                                     </div>
                                 </div>
@@ -659,7 +659,45 @@
                             </fieldset> --}}
                         </div>
                     </form>
-                </div>
+<meta name="csrf-token" content="{{ csrf_token() }}">
+
+<div class="card shadow-lg border-0 rounded-3">
+    <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+        <h5 class="mb-0"><i class="fas fa-clock mr-2"></i> Add Duration</h5>
+        <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+
+    <div class="card-body">
+        <form id="addDurationForm">
+            <div class="form-group mb-3">
+                <label class="font-weight-semibold">Name <span class="text-danger">*</span></label>
+                <input type="text" id="durationName" class="form-control" placeholder="Enter duration name">
+            </div>
+
+            <div class="form-group mb-3">
+                <label class="font-weight-semibold">Months</label>
+                <input type="number" id="durationMonths" class="form-control" placeholder="Enter number of months">
+            </div>
+
+            <div class="form-group mb-4">
+                <label class="font-weight-semibold">Status</label>
+                <select id="durationStatus" class="form-control">
+                    <option value="1" selected>Active</option>
+                    <option value="0">Inactive</option>
+                </select>
+            </div>
+
+            <div class="d-flex justify-content-end">
+                <button type="submit" class="btn btn-success px-4">
+                    <i class="fas fa-save mr-2"></i> Save Duration
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
             </div>
         </div>
     </div>
@@ -688,6 +726,46 @@ function videoPreview(event, preview, source) {
         videoPreview.load();
     }
 }
+
+
+
+$(document).ready(function () {
+    $.ajaxSetup({
+        headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') }
+    });
+
+    $('#addDurationForm').submit(function (e) {
+        e.preventDefault();
+
+        let formData = {
+            name: $('#durationName').val(),
+            months: $('#durationMonths').val(),
+            status: $('#durationStatus').val()
+        };
+
+        $.ajax({
+            url: "{{ route('admin.course.duration.store') }}",
+            type: "POST",
+            data: formData,
+            success: function (response) {
+                if (response.success) {
+                    $('#addDurationModal').modal('hide');
+                    $('#addDurationForm')[0].reset();
+                    $('#durationSelect').append(`<option value="${response.id}" selected>${response.name}</option>`);
+                    alert(response.message);
+                }
+            },
+            error: function (xhr) {
+                let errors = xhr.responseJSON?.errors;
+                if (errors) {
+                    alert(Object.values(errors).flat().join('\n'));
+                } else {
+                    alert('Something went wrong.');
+                }
+            }
+        });
+    });
+});
 </script>
 @endpush
 @endsection

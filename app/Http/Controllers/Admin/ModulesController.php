@@ -116,4 +116,10 @@ class ModulesController extends Controller
         $module->delete();
         return redirect()->route('modules.index')->with('success', 'Exam Module deleted successfully');
     }
+    public function getBatches(Request $request)
+    {
+        $courseId = $request->course_id;
+        $batches = Batch::where('course_id', $courseId)->where('status', 1)->get(['id', 'name']);
+        return response()->json($batches);
+    }
 }

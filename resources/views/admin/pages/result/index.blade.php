@@ -28,7 +28,6 @@
                                                         <th>Marks</th>
                                                         <th>Batch</th>
                                                         <th>Course</th>
-                                                        <th>Centre</th>
                                                         <th>Action</th>
                                                     </tr>
                                                 </thead>
@@ -43,16 +42,16 @@
                                                             <td>{{$exam->marks}}</td>
                                                             <td>{{$exam->batch->name}}</td>
                                                             <td>{{$exam->course->title}}</td>
-                                                            <td>{{$exam->centre->name}}</td>
                                                             <td>
-                                                                <a href="{{ route('exam_result.show', $exam->id) }}"
-                                                                    class="btn btn-info text-white">
-                                                                    <span class="glyphicon glyphicon-edit"></span> View
-                                                                </a>
-                                                                <button type="button" class="btn btn-danger text-white"
-                                                                onclick="confirmDelete({{ $exam->id }})">Delete</button>
+                                                                <div class="d-flex align-items-center gap-2">
+                                                                    <a href="{{ route('exam_result.show', $exam->id) }}" class="btn btn-outline-primary btn-sm   shadow-sm">
+                                                                        <i class="fas fa-eye"></i> View
+                                                                    </a>
+                                                                    <button type="button" class="btn btn-danger text-white btn-sm   "  onclick="confirmDelete({{ $exam->id }})">
+                                                                        <i class="fas fa-trash-alt"></i> Delete
+                                                                    </button>
+                                                                </div>
                                                             </td>
-                                                        </tr>
                                                     @endforeach
                                                     @if ($exams->count() == 0)
                                                         <tr></tr>
@@ -79,6 +78,10 @@
             </div>
 
         </div>
+    </div>
+    <div>
+ 
+
     </div>
      <!-- Delete Confirmation Modal -->
 <div class="modal fade" id="confirmDeleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"

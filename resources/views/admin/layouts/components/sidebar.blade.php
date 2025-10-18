@@ -90,11 +90,11 @@
                         <i class="ri-slideshow-line"></i>Faculty
                     </a>
                 </li>
-                <li class="nav-item  {{ request()->is('admin/payment*') ? 'active' : '' }}">
+                <!-- <li class="nav-item  {{ request()->is('admin/payment*') ? 'active' : '' }}">
                     <a href="{{ route('admin.payment.index') }}" class="nav-link">
                         <i class="ri-slideshow-line"></i>Payments
                     </a>
-                </li>
+                </li> -->
                 <!-- <li class="nav-item ">
                     <a href="{{ url('/admin/payment') }}" class="nav-link">
                         <i class="ri-bank-card-line"></i> Payment

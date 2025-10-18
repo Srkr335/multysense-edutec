@@ -27,8 +27,8 @@
                                 </div>
                                 <div class="profile-group">
                                     <div class="profile-name text-center">
-                                        <h4><a href="student-profile.html">{{ $tutor->first_name }}
-                                                {{ $tutor->last_name }}</a></h4>
+                                        <h4 class="success" >{{ $tutor->first_name }}
+                                                {{ $tutor->last_name }}</h4>
                                         <p class="mb-1">{{ $tutor->email }}
                                         </p>
                                         <p class="mb-1">{{ $tutor->mobile_no }}
@@ -187,8 +187,8 @@
                                     </div>
                                     <div class="col-lg-6">
                                         <div class="form-group">
-                                            <label class="form-control-label">ZipCode</label>
-                                            <input type="text" class="form-control" placeholder="Enter your Zipcode"
+                                            <label class="form-control-label">PinCode</label>
+                                            <input type="text" class="form-control" placeholder="Enter your Pincode"
                                                 name="zipcode" value="{{ $tutor->pincode }}">
                                         </div>
                                     </div>

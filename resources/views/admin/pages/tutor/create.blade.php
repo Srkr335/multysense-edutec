@@ -239,8 +239,8 @@
                                     </div>
                                     <div class="col-lg-6">
                                         <div class="form-group">
-                                            <label class="form-control-label">ZipCode</label>
-                                            <input type="text" class="form-control" placeholder="Enter your Zipcode"
+                                            <label class="form-control-label">PinCode</label>
+                                            <input type="text" class="form-control" placeholder="Enter your Pincode"
                                                 name="zipcode">
                                         </div>
                                     </div>

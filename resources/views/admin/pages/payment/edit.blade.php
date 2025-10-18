@@ -40,25 +40,21 @@
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="col-lg-6">
-                                        <div class="form-group">
-                                            <label class="form-control-label">Courses</label>
-                                            <select class="form-select select " name="course" id="course" required>
-                                                <option data-select2-id="3">Select Course</option>
-                                                @foreach ($courses as $key => $course)
-                                                    <option value="{{ $course->id }}"
-                                                        @if ($payment->course_id == $course->id) selected @endif>
-                                                        {{ $course->title }}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
+                                   <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label class="form-control-label">Courses</label>
+                                        <select name="course" id="course_id" class="form-select" required>
+                                            <option value="">Select Course</option>
+                                        </select>
                                     </div>
+                                </div>
+
 
                                     <div class="col-lg-6">
                                         <div class="form-group">
                                             <label class="form-control-label">Amount</label>
                                             <input type="number" class="form-control" placeholder="Enter amount" required
-                                                name="amount" value="{{ $payment->amount }}">
+                                                name="amount" value="{{ $payment->due_amount }}" readonly>
                                         </div>
                                     </div>
                                     <div class="col-lg-6">
@@ -107,4 +103,39 @@
 
         </div>
     </div>
+     <script>
+ $(document).ready(function () {
+    let studentId = "{{ $payment->student_id }}";
+    let selectedCourseId = "{{ $payment->course_id }}";
+
+    if (studentId) {
+        $('#course_id').html('<option>Loading...</option>');
+
+        $.ajax({
+            url: "{{ route('admin.student.courses') }}",
+            method: "GET",
+            data: { student_id: studentId },
+            success: function (res) {
+                if (!res || res.length === 0) {
+                    $('#course_id').html('<option value="">No courses found</option>');
+                    return;
+                }
+
+                let html = '<option value="">Select Course</option>';
+                res.forEach(function (course) {
+                    let selected = (course.id == selectedCourseId) ? 'selected' : '';
+                    html += <option value="${course.id}" ${selected}>${course.title}</option>;
+                });
+
+                $('#course_id').html(html);
+            },
+            error: function () {
+                $('#course_id').html('<option value="">Failed to load courses</option>');
+            }
+        });
+    }
+});
+
+</script>
+
 @endsection

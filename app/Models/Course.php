@@ -33,4 +33,17 @@ class Course extends Model
     {
         return $this->centres()->pluck('centre_id')->toArray();
     }
+    public function getDurationTextAttribute()
+    {
+        switch ($this->duration) {
+            case 1:
+                return '1 Year';
+            case 2:
+                return '6 Month';
+            case 3:
+                return '8 Month';
+            default:
+                return 'Unknown Duration';
+        }
+    }
 }

@@ -19,6 +19,8 @@ use App\Http\Controllers\Admin\ModulesController;
 use App\Http\Controllers\Admin\ResultController;
 use App\Http\Controllers\Admin\RolesController;
 use App\Http\Controllers\Admin\SchemeController;
+use App\Http\Controllers\Admin\InvoiceController;
+use App\Http\Controllers\Admin\CertificateController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserCourseViewController;
 use App\Http\Controllers\userinstructorController;
@@ -41,6 +43,10 @@ Route::middleware(['auth', 'user-access:admin'])->group(function () {
         // dashboard
         Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('admin.home');
 
+        // for editing profile
+        Route::get('/profile/edit', [DashboardController::class, 'edit'])->name('edit.profile');
+        Route::put('/admin/profile/update/{id}',[DashboardController::class, 'update'])->name('update.profile');
+
         // course
         Route::get('/course', [CourseController::class, 'index'])->name('admin.course.index');
         Route::get('/get-courses', [CourseController::class, 'getCourses'])->name('admin.course.get');
@@ -54,6 +60,9 @@ Route::middleware(['auth', 'user-access:admin'])->group(function () {
         Route::get('/course/study-materials/edit', [CourseController::class, 'studyMaterialsEdit'])->name('admin.course.study-materials.edit');
         Route::post('/course/study-materials/update', [CourseController::class, 'studyMaterialsUpdate'])->name('admin.course.study-materials.update');
         Route::get('/course/study-materials/delete/{id}', [CourseController::class, 'studyMaterialsDelete'])->name('admin.course.study-materials.delete');
+
+        Route::post('/course/duration/store', [CourseController::class, 'storeDuration'])->name('admin.course.duration.store');
+
 
         // notification
         Route::get('/notification', [NotificationController::class, 'index']);
@@ -73,6 +82,9 @@ Route::middleware(['auth', 'user-access:admin'])->group(function () {
         Route::get('/students/getcentre', [StudentController::class, 'getCentre'])->name('admin.student.select_centre');
         Route::get('/students/getbatch', [StudentController::class, 'getBatch'])->name('admin.student.select_batch');
         Route::post('/payments/addpayment', [StudentController::class, 'addPayment'])->name('admin.student.addpayment');
+
+        //invoice
+        Route::get('/student/invoice/{id}', [InvoiceController ::class, 'index'])->name('invoice.generate');
 
         // category
         Route::get('/category', [CategoryController::class, 'index'])->name('admin.category.index');
@@ -95,7 +107,9 @@ Route::middleware(['auth', 'user-access:admin'])->group(function () {
         Route::post('/payments/store', [PaymentController::class, 'store'])->name('admin.payment.store');
         Route::get('/payments/edit/{id}', [PaymentController::class, 'edit'])->name('admin.payment.edit');
         Route::post('/payments/update/{id}', [PaymentController::class, 'update'])->name('admin.payment.update');
-        Route::get('/payments/getcourse', [PaymentController::class, 'getCourse'])->name('admin.payment.select_course');
+        Route::get('/admin/student-courses', [PaymentController::class, 'getStudentCourses'])->name('admin.student.courses');
+        Route::delete('/payments/{id}', [PaymentController::class, 'destroy'])->name('admin.payment.delete');
+        
 
         // Tags
         // Route::get('/tag', [TagController::class, 'index']);
@@ -206,3 +220,31 @@ Route::middleware(['auth', 'user-access:user'])->group(function () {
     Route::get('/instructor_profile', [userinstructorController::class, 'index']);
     Route::get('/notification', [UserNotificationController::class, 'index']);
 });
+
+// Download  certificate of result
+Route::get('/certificate/generate/{student_id}', [CertificateController::class, 'generateCertificate']) ->name('certificate.generate');
+
+//student Edit-> select batch under course
+Route::get('/admin/get-course-batches', [CourseController::class, 'getBatches'])->name('admin.course.batches');
+
+// Get batches based on course ID
+Route::get('get-batches/{course_id}', [QuizController::class, 'getbatchs'])->name('get.batches');
+
+// Get batches based on course ID In the ExamController
+// Route::get('/get-batches-by-course', [ExamController::class, 'getBatchesByCourse'])->name('get.batches.by.course');
+Route::get('/get-batches-by-course/{centreId}', [ExamController::class, 'getBatchesByCourse'])
+     ->name('get.batches.by.course');
+
+
+// Get batches based on course ID
+Route::get('get-batches/{course_id}', [ModulesController::class, 'getBatches'])->name('get.batches');
+
+//student Edit-> select batch under course
+Route::get('/get-courses-by-centre/{centreId}', [BatchController::class, 'getCoursesByCentre'])->name('get.batches.by.course');
+
+//tutor  points allocation 
+ Route::post('/points/allocate', [TutorController::class, 'allocatePoints'])->name('points.allocate');
+    
+//student  points allocation 
+ Route::post('/student/allocate', [StudentController::class, 'studentallocatePoints'])->name('studentpoints.allocate');
+

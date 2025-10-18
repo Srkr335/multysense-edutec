@@ -127,7 +127,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="row">
+                                <!-- <div class="row">
                                     <div class="col-lg-6">
                                         <div class="form-group">
                                             <label class="form-control-label">Course</label>
@@ -149,6 +149,28 @@
                                                     @foreach($batches as $batch)
                                                     <option value="{{$batch->id}}">{{$batch->name}}</option>
                                                     @endforeach    
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div> -->
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <label class="form-control-label">Course</label>
+                                            <select class="form-select" name="course_name" id="courseSelect">
+                                                <option value=''>Select Course</option>
+                                                @foreach($courses as $course)
+                                                    <option value="{{ $course->id }}">{{ $course->title }}</option>
+                                                @endforeach    
+                                            </select>
+                                        </div>  
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <label class="form-control-label">Batch</label>
+                                           <select class="form-select" name="batch_name" id="batchSelect">
+                                                <option value=''>Select Batch</option>
+                                                {{-- Batches will be loaded via AJAX --}}
                                             </select>
                                         </div>
                                     </div>
@@ -241,6 +263,35 @@
     moduleCheckboxes.forEach(function(checkbox) {
         checkbox.addEventListener('change', function() {
             updateCheckAllStatus();
+        });
+    });
+     $(document).ready(function() {
+        let centreId = "{{ $centre->id ?? 0 }}"; // safe default value
+
+        $('#courseSelect').on('change', function() {
+            var courseId = $(this).val();
+            $('#batchSelect').html('<option value="">Loading...</option>');
+
+            if (courseId) {
+                $.ajax({
+                    url: "/get-batches-by-course/" + centreId, // ✅ add centreId here
+                    type: "GET",
+                    data: { course_id: courseId },
+                    success: function(res) {
+                        let options = '<option value="">Select Batch</option>';
+                        res.forEach(function(batch) {
+                            options += `<option value="${batch.id}">${batch.name}</option>`;
+                        });
+                        $('#batchSelect').html(options);
+                    },
+                    error: function(err) {
+                        console.error("Error fetching batches:", err);
+                        $('#batchSelect').html('<option value="">No Batch Found</option>');
+                    }
+                });
+            } else {
+                $('#batchSelect').html('<option value="">Select Course First</option>');
+            }
         });
     });
 </script>

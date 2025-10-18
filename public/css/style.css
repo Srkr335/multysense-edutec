@@ -469,6 +469,59 @@ button.bg-danger:hover {
     border-color: #009efb;
     color: #fff;
 }
+
+/* newly imported code */
+
+
+ @page {
+  size: A4 ; /* or remove 'landscape' if you prefer vertical A4 */
+  margin: 10mm;
+}
+
+/* --------- Two-up container --------- */
+.sheet {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 0;
+  border: var(--thin) solid var(--ink);
+  padding: 12px;
+  width: 100%;
+  flex-wrap: nowrap;          /* ✅ Prevent wrapping vertically */
+}
+
+.receipt {
+  flex: 1 1 50%;              /* ✅ Ensure equal width for both */
+  padding: 8px 10px 10px;
+  box-sizing: border-box;
+  min-width: 0;               /* ✅ Prevent overflow breaking layout */
+}
+
+.receipt + .receipt {
+  border-left: 1px dashed var(--ink);
+}
+
+/* ✅ When printing — keep them on one line per page */
+@media print {
+  .sheet {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    page-break-inside: avoid;
+  }
+  .receipt {
+    width: 50%;
+  }
+}
+
+
+/* file end */
+
+
+
+
+
 .btn-warning {
 	background-color: #ffbc34;
 	border: 1px solid #ffbc34

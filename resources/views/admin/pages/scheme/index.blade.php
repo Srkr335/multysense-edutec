@@ -25,11 +25,11 @@
 
                                         <table class="table table-nowrap mb-2">
                                             <thead>
-                                                <tr>
+                                                <tr style="background-color: #F04747; color: #fff; text-align: left;">
                                                     <th>Sl.No</th>
                                                     <th>Name</th>
                                                     <th>Discount</th>
-                                                    
+
                                                     <th>Status</th>
                                                     <th>Action</th>
                                                 </tr>
@@ -42,7 +42,7 @@
                                                     <td>{{ $n }}</td>
                                                     <td>{{ $scheme->name }}</td>
                                                     <td>{{ $scheme->discount }}</td>
-                                                    
+
                                                     <td>
                                                         @if ($scheme->status == 1)
                                                         <span class="badge info-low">Enabled</span>
@@ -101,7 +101,11 @@
                 Are you sure you want to delete this item?
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <button type="button" onclick="closeModal()"
+                    style="background-color: #6c757d; color: #fff; padding: 8px 14px; border: none; border-radius: 6px; font-weight: 600; margin-right: 8px; cursor: pointer;">
+                    Cancel
+                </button>
+
                 <form id="deleteForm" method="POST" action=" {{ route('admin.scheme.delete') }}">
                     @csrf
                     <input type="hidden" name="scheme_id" id="scheme_id">
@@ -112,13 +116,16 @@
     </div>
 </div>
 <script type="text/javascript">
-function confirmDelete(id) {
-    var form = document.getElementById('deleteForm');
-    $('#confirmDeleteModal').modal('show');
-    $('#scheme_id').val(id);
+    function confirmDelete(id) {
+        $('#confirmDeleteModal').modal('show');
+        $('#scheme_id').val(id);
+    }
 
-}
+    function closeModal() {
+        $('#confirmDeleteModal').modal('hide');
+    }
 </script>
+
 
 
 @endsection

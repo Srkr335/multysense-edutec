@@ -50,6 +50,7 @@ class ModuleApiController extends Controller
     { 
         $result = new Result();
         $result->exam_id = $request->exam_id;
+        $result->exam_name = $request->exam_name;
         $result->batch_id = $request->batch_id;
         $result->course_id = $request->course_id;
         $result->centre_id = $request->centre_id;

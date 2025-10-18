@@ -24,7 +24,7 @@
 
                                         <table class="table table-nowrap mb-2 dataTable">
                                             <thead>
-                                                <tr>
+                                                <tr  style="background-color: #F04747; color: #fff; text-align: left;">
                                                     <th>Sl.No</th>
                                                     <th>Image</th>
                                                     <th>Title</th>

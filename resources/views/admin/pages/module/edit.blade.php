@@ -115,7 +115,7 @@
                                                 name="module_name" value="{{$module->modules_name}}">
                                         </div>
                                     </div>
-                                    <div class="col-lg-6">
+                                    <!-- <div class="col-lg-6">
                                         <div class="form-group">
                                             <label class="form-control-label">Course</label>
                                             <select class="form-control" name="course" id="course">
@@ -134,6 +134,28 @@
                                                 @foreach($batches as $batch)
                                                 <option value="{{ $batch->id }}" {{$module->batch_id == $batch->id ? 'selected' : ''}}>{{ $batch->name }}</option>
                                                 @endforeach
+                                            </select>
+                                        </div>
+                                    </div> -->
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <label class="form-control-label">Course</label>
+                                                <select class="form-select" name="course" id="courseSelect">
+                                                <option value=''>Select Course</option>
+                                                @foreach($courses as $course)
+                                                    <option value="{{ $course->id }}" {{ $module->course_id == $course->id ? 'selected' : '' }}>
+                                                        {{ $course->title }}
+                                                    </option>
+                                                @endforeach    
+                                            </select>
+                                        </div>  
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <label class="form-control-label">Batch</label>
+                                                <select class="form-select" name="batch" id="batchSelect">
+                                                <option value=''>Select Batch</option>
+                                                {{-- Batches will be loaded via AJAX --}}
                                             </select>
                                         </div>
                                     </div>
@@ -156,4 +178,49 @@
 
         </div>
     </div>
+
+    <script>
+ 
+ $(document).ready(function() {
+    var selectedCourseId = "{{ $module->course_id }}";
+    var selectedBatchId = "{{ $module->batch_id }}";
+
+    function loadBatches(courseId, selectedBatchId = null) {
+        $('#batchSelect').html('<option value="">Loading...</option>');
+
+        if (courseId) {
+            $.ajax({
+                url: "{{ route('get.batches.by.course') }}",
+                type: "GET",
+                data: { course_id: courseId },
+                success: function(res) {
+                    let options = '<option value="">-- Select Batch --</option>';
+                    res.forEach(function(batch) {
+                        let selected = batch.id == selectedBatchId ? 'selected' : '';
+                        options += `<option value="${batch.id}" ${selected}>${batch.name}</option>`;
+                    });
+                    $('#batchSelect').html(options);
+                },
+                error: function() {
+                    $('#batchSelect').html('<option value="">Error loading batches</option>');
+                }
+            });
+        } else {
+            $('#batchSelect').html('<option value="">Select Course First</option>');
+        }
+    }
+
+    // Load on page load for edit
+    if (selectedCourseId) {
+        loadBatches(selectedCourseId, selectedBatchId);
+    }
+
+    // On course change
+    $('#courseSelect').on('change', function() {
+        let courseId = $(this).val();
+        loadBatches(courseId); // no batch selected on change
+    });
+});
+
+</script>
 @endsection

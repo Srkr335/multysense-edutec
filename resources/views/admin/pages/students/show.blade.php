@@ -216,8 +216,8 @@
                             <td>{{ $n }}</td>
                             <td><a href="#">#{{ str_pad($payment->invoice_number, 3, '0', STR_PAD_LEFT) }}</a></td>
                             <td>{{ $payment->pay_amount }}</td>
-                            <td>{{ $payment->due_amount }}</td>
                             <td></td>
+                             <td>{{ $payment->due_amount }}</td>
                             <td>{{ date('d-m-Y',strtotime($payment->payment_date)) }}</td>
                             <td>
                                 @if ($payment->status == 1)
@@ -226,10 +226,13 @@
                                 <span class="badge badge-danger">Not Paid</span>
                                 @endif
                             </td>
-                            <td> <button type="button" class="btn btn-info text-white" data-toggle="modal"
-                                    data-target="#addPayment" data-course-id="{{ $payment->id }}">
-                                    Invoice
-                                </button></td>
+                            <td>
+                                <a href="{{ route('invoice.generate', ['id' => $payment->id]) }}">
+                                    <button type="button" class="btn btn-info text-white" data-course-id="{{ $payment->id }}">
+                                        Invoice
+                                    </button>
+                                </a>
+                            </td>
                         </tr>
                         @endforeach
                     </tbody>
@@ -288,49 +291,75 @@
 <div class="modal fade" id="addPayment" tabindex="-1" role="dialog" aria-labelledby="assignCourseLabel"
     aria-hidden="true">
     <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="assignCourseLabel">Add Payment</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <div class="modal-content" 
+             style="background: url('https://images.unsplash.com/photo-1521791136064-7986c2920216?auto=format&fit=crop&w=900&q=80') 
+                    no-repeat center center / cover; 
+                    border-radius: 10px; 
+                    color: #fff;
+                    box-shadow: 0 10px 25px rgba(0,0,0,0.5);">
+
+            <div class="modal-header" style="background: rgba(0,0,0,0.6); border-bottom: none;">
+                <h5 class="modal-title" id="assignCourseLabel" style="color: #fff;">Add Payment</h5>
+                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
+
             <form action="{{ route('admin.student.addpayment') }}" method="post">
                 @csrf
-                <div class="modal-body">
+                <div class="modal-body" style="background: rgba(0,0,0,0.5); border-radius: 10px;">
                     <input type="hidden" name="student_id" value="{{ $student->id }}">
                     <input type="hidden" id="courses" name="course_id" value="">
+                    
                     <div class="form-group">
-                        <label class="add-course-label">Amount<span class="text-danger">*</span></label>
-                        <input type="number" name="amount" class="form-control" required placeholder="₹">
+                        <label class="add-course-label">Amount <span class="text-danger">*</span></label>
+                        <input type="number" name="amount" class="form-control" required placeholder="₹" 
+                               style="background: rgba(255,255,255,0.9); border: none; border-radius: 5px;">
                     </div>
+
                     <div class="form-group">
-                        <label class="add-course-label">Date<span class="text-danger">*</span></label>
-                        <input type="datetime-local" class="form-control" required name="payment_date">
+                        <label class="add-course-label">Date <span class="text-danger">*</span></label>
+                        <input type="datetime-local" class="form-control" required name="payment_date" 
+                               style="background: rgba(255,255,255,0.9); border: none; border-radius: 5px;">
                     </div>
+
                     <div class="form-group">
                         <label class="form-control-label">Status</label>
-                        <select class="form-select select country-select select2-hidden-accessible" name="status"
-                            tabindex="-1" aria-hidden="true">
+                        <select class="form-select" name="status"
+                                style="background: rgba(255,255,255,0.9); border: none; border-radius: 5px;">
                             <option value="1">Paid</option>
                             <option value="0">Not Paid</option>
                         </select>
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Save</button>
+
+                <div class="modal-footer" style="background: rgba(0,0,0,0.6); border-top: none;">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal"
+                            style="background: rgba(255,255,255,0.3); border: none;">Close</button>
+                    <button type="submit" class="btn btn-primary"
+                            style="background-color: #007bff; border: none;">Save</button>
                 </div>
             </form>
         </div>
     </div>
 </div>
+
+
+
 @push('scripts')
 <script>
 $(document).on('click', '.btn[data-toggle="modal"]', function() {
     const courseId = $(this).data('course-id');
     $('#addPayment #courses').val(courseId);
+
+    // sHOW  The current date and time 
+    const now = new Date();
+    // shift by the timezone offset so toISOString() will reflect local time
+    now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+    const localDatetime = now.toISOString().slice(0,16); 
+    $('#addPayment input[name="payment_date"]').val(localDatetime);
 });
 </script>
 @endpush
+
 @endsection
