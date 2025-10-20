@@ -28,7 +28,7 @@
 
                                         <table class="table table-nowrap mb-2">
                                             <thead>
-                                                <tr>
+                                  <tr  style="background-color: #F04747; color: #fff; text-align: left;">
                                                     <th>Sl.No</th>
                                                     <th>Course</th>
                                                     <th>Question</th>

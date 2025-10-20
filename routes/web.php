@@ -54,6 +54,8 @@ Route::middleware(['auth', 'user-access:admin'])->group(function () {
         Route::post('/course/store', [CourseController::class, 'store'])->name('admin.course.store');
         Route::get('/course/edit/{id}', [CourseController::class, 'edit'])->name('admin.course.edit');
         Route::post('/course/update/{id}', [CourseController::class, 'update'])->name('admin.course.update');
+        Route::get('/course/delete/{id}', [CourseController::class, 'destroy'])->name('admin.course.delete');
+
 
         Route::get('/course/study-materials/{id}', [CourseController::class, 'studyMaterials'])->name('admin.course.study-materials');
         Route::post('/course/study-materials/store', [CourseController::class, 'studyMaterialsStore'])->name('admin.course.study-materials.store');
@@ -161,7 +163,7 @@ Route::middleware(['auth', 'user-access:admin'])->group(function () {
         //centre
         Route::resource('centre', CentreController::class);
         Route::post('centre/update', [CentreController::class, 'update'])->name('admin.centre.update');
-        Route::post('centre/delete', [CentreController::class, 'destroy'])->name('admin.centre.delete');
+        Route::post('centre/delete/{id}', [CentreController::class, 'destroy'])->name('admin.centre.delete');
 
 
         //exam
@@ -231,11 +233,7 @@ Route::get('/admin/get-course-batches', [CourseController::class, 'getBatches'])
 Route::get('get-batches/{course_id}', [QuizController::class, 'getbatchs'])->name('get.batches');
 
 // Get batches based on course ID In the ExamController
-// Route::get('/get-batches-by-course', [ExamController::class, 'getBatchesByCourse'])->name('get.batches.by.course');
-Route::get('/get-batches-by-course/{centreId}', [ExamController::class, 'getBatchesByCourse'])
-     ->name('get.batches.by.course');
-
-
+Route::get('/get-batches-by-course/{centreId}', [ExamController::class, 'getBatchesByCourse'])->name('get.batches.by.course');
 // Get batches based on course ID
 Route::get('get-batches/{course_id}', [ModulesController::class, 'getBatches'])->name('get.batches');
 

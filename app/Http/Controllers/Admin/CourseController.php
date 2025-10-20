@@ -75,18 +75,23 @@ class CourseController extends Controller
                     return '
         <div style="display: flex; justify-content: center; align-items: center; gap: 6px;">
             <a href="' . route("admin.course.study-materials", $row->id) . '" 
-               class="btn btn-info btn-sm" 
-               style="font-weight: 600; padding: 6px 10px; border-radius: 5px;">
+               class="btn btn-info btn-sm">
                Study Materials
             </a>
             <a href="' . route("admin.course.edit", $row->id) . '" 
-               class="btn btn-primary btn-sm" 
-               style="font-weight: 600; padding: 6px 10px; border-radius: 5px;">
+               class="btn btn-primary btn-sm">
                Edit
             </a>
+          <a href="javascript:void(0);" 
+   data-url="' . route("admin.course.delete", $row->id) . '" 
+   class="btn btn-danger btn-sm delete-course" 
+   style="font-weight: 600; padding: 6px 10px; border-radius: 5px;">
+   Delete
+</a>
         </div>
     ';
                 })
+
 
                 ->rawColumns(['image', 'level', 'category', 'status', 'action'])
                 ->make(true);
@@ -351,8 +356,25 @@ class CourseController extends Controller
      */
     public function destroy($id)
     {
-        //
+        try {
+            $course = Course::findOrFail($id);
+
+            //  Delete image if exists
+            if ($course->image && file_exists(public_path('images/course/' . $course->image))) {
+                unlink(public_path('images/course/' . $course->image));
+            }
+
+            //  Delete course record
+            $course->delete();
+
+            // Redirect back with success message
+            return redirect()->back()->with('success', 'Course deleted successfully.');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Failed to delete course: ' . $e->getMessage());
+        }
     }
+
+
 
     public function studyMaterials($id)
     {

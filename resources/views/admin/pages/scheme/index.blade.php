@@ -29,9 +29,8 @@
                                                     <th>Sl.No</th>
                                                     <th>Name</th>
                                                     <th>Discount</th>
-
                                                     <th>Status</th>
-                                                    <th>Action</th>
+                                                    <th style="text-align: end;">Action</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -50,7 +49,7 @@
                                                         <span class="badge info-inter">Disabled</span>
                                                         @endif
                                                     </td>
-                                                    <td>
+                                                    <td  style="text-align: end;">
                                                         <a href="{{route('scheme.edit', $scheme->id)}}"
                                                             class="btn btn-info text-white">
                                                             <span class="glyphicon glyphicon-edit"></span> Edit

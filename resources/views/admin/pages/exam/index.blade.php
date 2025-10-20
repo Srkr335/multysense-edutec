@@ -18,7 +18,7 @@
                         <div class="settings-tickets-blk course-instruct-blk table-responsive">
                             <table class="table table-nowrap mb-2">
                                 <thead>
-                                    <tr>
+                                  <tr  style="background-color: #F04747; color: #fff; text-align: left;">
                                         <th>Sl.No</th>
                                         <th>Exam</th>
                                         <th>Marks</th>

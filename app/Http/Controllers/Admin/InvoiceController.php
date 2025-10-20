@@ -36,6 +36,7 @@ class InvoiceController extends Controller
 
     $studentPayments = StudentPayment::where('student_id', $studentInvoice->student_id)->get();
     $totalPaid = $studentPayments->sum('pay_amount');
+    
 
     $tax = 18;
     $totalTax = $studentInvoice->pay_amount * $tax / 100;
@@ -64,8 +65,10 @@ class InvoiceController extends Controller
         'totalTax' => $totalTax,
         'balanceDue' => $balanceDue,
         'totalPaid' => $totalPaid,
+        'paidAmount' => $paidAmount, 
         // etc
     ]);
+
 
     return $pdf->download("invoice_{$id}.pdf");
 }

@@ -97,7 +97,7 @@
     $('#category').select2();
     $('#course').select2();
 
-    const courses = @json($courses);
+    const courses = {!! json_encode($courses) !!};
 
     function filterCourses() {
         const selectedCategoryIds = $('#category').val();

@@ -4,12 +4,11 @@
 <div class="container-fluid" style="padding: 20px; background-color: #f8f9fa;">
     <div class="row">
         <div class="col-md-12">
-
             <div style="background-color: #ffffff; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); padding: 20px;">
 
                 <!-- Header Section -->
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                    <h3 style="font-weight: 700; color: #2c3e50; margin: 0;"> Centres Management</h3>
+                    <h3 style="font-weight: 700; color: #2c3e50; margin: 0;">Centres Management</h3>
                     <a href="{{ route('centre.create') }}"
                         style="background-color: #007bff; color: #fff; padding: 10px 18px; border-radius: 6px; text-decoration: none; font-weight: 600; transition: background 0.3s;">
                         Add Centre
@@ -31,11 +30,9 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <?php $n = 0; ?>
-                            @foreach ($centers as $center)
-                            <?php $n++; ?>
-                            <tr style="border-bottom: 1px solid #ddd; background-color: {{ $n % 2 == 0 ? '#f9f9f9' : '#ffffff' }};">
-                                <td style="padding: 10px;">{{ $n }}</td>
+                            @forelse ($centers as $index => $center)
+                            <tr style="border-bottom: 1px solid #ddd; background-color: {{ $index % 2 == 0 ? '#f9f9f9' : '#ffffff' }};">
+                                <td style="padding: 10px;">{{ $index + 1 }}</td>
                                 <td style="padding: 10px; font-weight: 600;">{{ $center->name }}</td>
                                 <td style="padding: 10px;">{{ $center->address }}</td>
                                 <td style="padding: 10px;">{{ $center->mobile }}</td>
@@ -46,34 +43,32 @@
                                 </td>
                                 <td style="padding: 10px;">
                                     @if ($center->status == 1)
-                                    <span style="background-color: #28a745; color: white; padding: 5px 10px; border-radius: 5px;">Enabled</span>
+                                        <span style="background-color: #28a745; color: white; padding: 5px 10px; border-radius: 5px;">Enabled</span>
                                     @else
-                                    <span style="background-color: #dc3545; color: white; padding: 5px 10px; border-radius: 5px;">Disabled</span>
+                                        <span style="background-color: #dc3545; color: white; padding: 5px 10px; border-radius: 5px;">Disabled</span>
                                     @endif
                                 </td>
                                 <td style="padding: 10px; text-align: center; white-space: nowrap;">
                                     <div style="display: inline-flex; align-items: center; gap: 8px;">
                                         <a href="{{ route('centre.edit', $center->id) }}"
                                             style="background-color: #17a2b8; color: #fff; padding: 6px 14px; border-radius: 5px; 
-                   text-decoration: none; font-weight: 600; display: inline-block; transition: 0.2s;">
+                                                text-decoration: none; font-weight: 600; transition: 0.2s;">
                                             Edit
                                         </a>
-                                        <button type="button"
+
+                                        <button type="button" onclick="confirmDelete({{ $center->id }})"
                                             style="background-color: #dc3545; color: #fff; padding: 6px 14px; border-radius: 5px; 
-                   border: none; font-weight: 600; cursor: pointer; display: inline-block; transition: 0.2s;">
+                                                border: none; font-weight: 600; cursor: pointer; transition: 0.2s;">
                                             Delete
                                         </button>
                                     </div>
                                 </td>
-
                             </tr>
-                            @endforeach
-
-                            @if ($centers->count() == 0)
+                            @empty
                             <tr>
                                 <td colspan="7" style="text-align:center; padding: 20px; color: #6c757d;">No Data Found</td>
                             </tr>
-                            @endif
+                            @endforelse
                         </tbody>
                     </table>
                 </div>
@@ -82,7 +77,6 @@
                 <div style="margin-top: 20px; text-align: right;">
                     {{ $centers->links() }}
                 </div>
-
             </div>
         </div>
     </div>
@@ -104,9 +98,10 @@
                 style="background-color: #6c757d; color: #fff; padding: 8px 14px; border: none; border-radius: 6px; font-weight: 600; margin-right: 8px; cursor: pointer;">
                 Cancel
             </button>
-            <form id="deleteForm" method="POST" action="{{ route('admin.centre.delete') }}" style="display: inline;">
+
+            <form id="deleteForm" method="POST" style="display: inline;">
                 @csrf
-                <input type="hidden" name="centre_id" id="centre_id">
+                @method('DELETE')
                 <button type="submit"
                     style="background-color: #dc3545; color: #fff; padding: 8px 14px; border: none; border-radius: 6px; font-weight: 600; cursor: pointer;">
                     Delete
@@ -116,9 +111,10 @@
     </div>
 </div>
 
-<script type="text/javascript">
+<script>
     function confirmDelete(id) {
-        document.getElementById('centre_id').value = id;
+        const form = document.getElementById('deleteForm');
+        form.action = `/admin/centre/${id}`; // ✅ dynamically set the route
         document.getElementById('confirmDeleteModal').style.display = 'flex';
     }
 

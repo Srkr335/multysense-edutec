@@ -61,7 +61,7 @@
                                                                     </a>
                                                                 </div>
                                                                 <div class="instructor-content">
-                                                                    <h6 class="mb-2">#WM{{ $student->student_code }}</h6>
+                                                                    <h6 class="mb-2">#MS{{ $student->student_code }}</h6>
                                                                     <h5><a href="{{ route('admin.student.show', $student->id) }}">
                                                                         {{ $student->user->name }}</a>
                                                                     </h5>

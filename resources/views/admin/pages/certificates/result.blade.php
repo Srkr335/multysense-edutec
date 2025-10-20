@@ -15,7 +15,7 @@
             position: relative;
             width: 210mm;
             height: 297mm;
-            background-image: url('{{ public_path("eduimg/demo.jpg") }}');
+            background-image: url('{{ public_path("eduimg/edutec demo.jpg") }}');
             background-size: cover;
             background-repeat: no-repeat;
             /* page-break-after: always; */
@@ -52,8 +52,8 @@
         <div class="field completion">{{ \Carbon\Carbon::parse($result->created_at)->format('Y') }}</div>
      <div class="field grade">{{ $result->grade }}</div>
      <div class="field regno">{{ $result->reg_no }}</div>
-          <div class="field slno">0001</div>
-          <div class="field certificateno">{{ $result->id  }}</div>
+          <div class="field slno">{{$result->slno}}</div>
+          <div class="field certificateno">{{ $result->certificateno  }}</div>
 
     <div class="field duration">
         {{ $result->course->duration_text ??'Course Duration' }}

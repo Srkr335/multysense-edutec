@@ -240,7 +240,7 @@ public function store(Request $request)
 
     // Fetch required values for reg_no
     $centre = Centre::find($request->centre);
-     $districtNo = str_pad($centre->district_no ?? '0', 2, '0', STR_PAD_LEFT);
+    $districtNo = str_pad($centre->district_no ?? '0', 2, '0', STR_PAD_LEFT);
     $centreNo = str_pad($request->centre, 2, '0', STR_PAD_LEFT);
     $batchNo = str_pad($request->batch, 2, '0', STR_PAD_LEFT);
     $courseNo = str_pad($request->course, 2, '0', STR_PAD_LEFT);
@@ -250,7 +250,7 @@ public function store(Request $request)
     $student->save();
 
     // Generate register number: W + year + district + centre + batch + course + student_id
-    $registerNo = 'W' . $year . $districtNo . $centreNo . $batchNo . $courseNo . str_pad($student->id, 3, '0', STR_PAD_LEFT);
+    $registerNo = 'MS' . $year . $districtNo . $centreNo . $batchNo . $courseNo . str_pad($student->id, 3, '0', STR_PAD_LEFT);
     $student->reg_no = $registerNo;
     $student->save();
 

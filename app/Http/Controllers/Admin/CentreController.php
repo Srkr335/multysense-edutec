@@ -144,14 +144,12 @@ class CentreController extends Controller
     /**
      * Remove the specified centre and user.
      */
-    public function destroy(Request $request)
-    {
-        $centre = Centre::findOrFail($request->centre_id);
-        $userId = $centre->user_id;
+   public function destroy($id)
+{
+    $centre = Centre::findOrFail($id);
+    $centre->delete();
 
-        User::where('id', $userId)->delete();
-        $centre->delete();
+    return redirect()->route('centre.index')->with('success', 'Centre deleted successfully!');
+}
 
-        return redirect()->route('centre.index')->with('success', 'Centre deleted successfully.');
-    }
 }

@@ -53,23 +53,33 @@
 
 
 
-    @push('scripts')
-        {{-- <script>
-            const list = document.querySelector('.more-details');
-            const btn = document.querySelector('#showDropdown')
+   
+        @push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-            btn.addEventListener('click', (e) => {
+<script>
+$(document).on('click', '.delete-course', function(e) {
+    e.preventDefault();
 
-                list.classList.toggle('hidden')
-                e.stopPropagation()
-            })
+    let deleteUrl = $(this).data('url'); // get delete route from data-url attribute
 
-            document.addEventListener('click', (e) => {
-                if (e.target.closest('.more-details')) return
+    Swal.fire({
+        title: 'Are you sure?',
+        text: "You won’t be able to revert this action!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Yes, delete it!',
+        cancelButtonText: 'Cancel'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            window.location.href = deleteUrl; // redirect to delete route
+        }
+    });
+});
+</script>
 
-                list.classList.add('hidden')
-            })
-        </script> --}}
 
         <script type="text/javascript">
             $(function() {

@@ -85,7 +85,7 @@
                 <div class="row align-items-center">
                     <div class="col-md-12">
                         <div class="add-course-header mb-4 pb-0">
-                            <h2>Add Exams</h2>
+                            <h2>Edit Exams</h2>
                             <div class="add-course-btns">
                                 <ul class="nav">
                                     <li>
