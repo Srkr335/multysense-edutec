@@ -9,6 +9,6 @@ class StudentAllocatedPoints extends Model
 {
     use HasFactory;
      protected $fillable = [
-        'id', 'student_id','tutor_id','reason','points'
+     'student_id','tutor_id','reason','points'
     ];
 }

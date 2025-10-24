@@ -82,8 +82,8 @@
                         <input type="number" name="points" id="points" placeholder="Enter points" required class="form-control bg-light text-dark">
                     </div>
                     <div class="mb-3">
-                        <label for="remarks" class="form-label fw-bold">Remarks</label>
-                        <textarea name="remarks" id="remarks" rows="3" placeholder="Reason for points allocation" class="form-control bg-light text-dark"></textarea>
+                        <label for="reason" class="form-label fw-bold">Remarks</label>
+                        <textarea name="reason" id="reason" rows="3" placeholder="Reason for points allocation" class="form-control bg-light text-dark"></textarea>
                     </div>
                 </div>
                 <div class="modal-footer border-0">

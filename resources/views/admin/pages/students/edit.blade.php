@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="container-fluid">
-        <form action="{{ route('admin.student.update', $student->id) }}" method="POST" enctype="multipart/form-data">
+      <form id="studentForm" action="{{ route('admin.student.update', $student->id) }}" method="POST" enctype="multipart/form-data">
             @csrf
             <div class="row align-items-center mb-4">
                 <div class="col-md-12 d-flex justify-content-between align-items-center">
@@ -145,12 +145,13 @@
                 </div>
             </div>
         </form>
-        <div class="add-course-btns">
-                                <ul class="nav">
-                                    <li><a href="{{ route('admin.student.index') }}" class="btn btn-black">Back to Students</a></li>
-                                    <li><button type="submit" class="btn btn-success-dark">Save</button></li>
-                                </ul>
-                            </div>
+      
+<div class="add-course-btns mt-3">
+    <ul class="nav">
+        <li><a href="{{ route('admin.student.index') }}" class="btn btn-black">Back to Students</a></li>
+        <li><button type="submit" class="btn btn-success-dark" form="studentForm">Save</button></li>
+    </ul>
+</div>
     </div>
 
 @push('scripts')

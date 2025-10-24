@@ -69,14 +69,11 @@
                                     <select class="form-control" name="scheme" id="scheme_id">
                                         <option value="">Select Scheme</option>
                                         @foreach($schemes as $scheme)
-                                        <option value="{{ $scheme->id }}" data-discount="{{ $scheme->discount }}">
-                                            {{ $scheme->name }}
-                                        </option>
+                                        <option value="{{ $scheme->id }}">{{ $scheme->name }}</option>
                                         @endforeach
                                     </select>
                                 </div>
                             </div>
-
 
                             {{-- Category --}}
                             <div class="col-lg-6">
@@ -110,13 +107,14 @@
                                 </div>
                             </div>
 
-                            {{-- Scheme Discount (auto-filled) --}}
+                            {{-- Discount Percentage --}}
                             <div class="col-lg-6">
                                 <div class="form-group">
-                                    <label class="form-control-label">Scheme Discount (%)</label>
-                                    <input type="text" class="form-control" id="scheme_discount" readonly>
+                                    <label class="form-control-label">Discount (%)</label>
+                                    <input type="number" class="form-control" name="discount_percentage" id="discount_percentage">
                                 </div>
                             </div>
+
                             {{-- Discount Amount --}}
                             <div class="col-lg-6">
                                 <div class="form-group">
@@ -124,6 +122,7 @@
                                     <input type="text" class="form-control" id="discount_amount" readonly>
                                 </div>
                             </div>
+
                             {{-- Total After Discount --}}
                             <div class="col-lg-6">
                                 <div class="form-group">
@@ -131,20 +130,7 @@
                                     <input type="text" class="form-control" id="total_after_discount" readonly>
                                 </div>
                             </div>
-                            {{-- Total Fee without GST (18%) --}}
-                            <div class="col-lg-6">
-                                <div class="form-group">
-                                    <label class="form-control-label">Total Fee (without GST 18%)</label>
-                                    <input type="text" class="form-control" id="total_without_gst" readonly>
-                                </div>
-                            </div>
-                           {{--  GST (18%) --}}
-                            <div class="col-lg-6">
-                                <div class="form-group">
-                                    <label class="form-control-label"> GST 18%</label>
-                                    <input type="text" class="form-control" id="gst" readonly>
-                                </div>
-                            </div>
+
                             {{-- Total Fee with GST (18%) --}}
                             <div class="col-lg-6">
                                 <div class="form-group">
@@ -152,6 +138,7 @@
                                     <input type="text" class="form-control" id="total_with_gst" readonly>
                                 </div>
                             </div>
+
                             {{-- Centre --}}
                             <div class="col-lg-6">
                                 <div class="form-group">
@@ -287,9 +274,7 @@
         $.ajax({
             url: "{{ route('admin.student.select_category') }}",
             method: "GET",
-            data: {
-                scheme_id: schemeId
-            },
+            data: { scheme_id: schemeId },
             success: function(res) {
                 let options = '<option value="">Select Category</option>';
                 res.forEach(cat => {
@@ -300,20 +285,6 @@
             error: err => console.error(err)
         });
     }
-
-    $('#scheme_id').change(function() {
-        let selectedOption = $(this).find(':selected');
-        let schemeDiscount = parseFloat(selectedOption.data('discount')) || 0;
-
-        // Display scheme discount
-        $('#scheme_discount').val(schemeDiscount);
-
-        // Apply it automatically to the discount field
-        $('#discount_percentage').val(schemeDiscount);
-
-        // Trigger recalculation if course fee already loaded
-        calculateTotals();
-    });
 
     function getCourse() {
         let categoryId = $('#category_id').val();
@@ -328,10 +299,7 @@
         $.ajax({
             url: "{{ route('admin.student.select_course') }}",
             method: "GET",
-            data: {
-                cat_id: categoryId,
-                scheme_id: schemeId
-            },
+            data: { cat_id: categoryId, scheme_id: schemeId },
             success: function(res) {
                 let options = '<option value="">Select Course</option>';
                 res.forEach(item => {
@@ -371,9 +339,7 @@
         $.ajax({
             url: "{{ route('admin.student.select_centre') }}",
             method: "GET",
-            data: {
-                course_id: courseId
-            },
+            data: { course_id: courseId },
             success: function(res) {
                 let options = '<option value="">Select Centre</option>';
                 res.forEach(item => {
@@ -392,9 +358,7 @@
         $.ajax({
             url: "{{ route('admin.student.select_batch') }}",
             method: "GET",
-            data: {
-                centre_id: centreId
-            },
+            data: { centre_id: centreId },
             success: function(res) {
                 let options = '<option value="">Select Batch</option>';
                 res.forEach(b => {
@@ -420,37 +384,6 @@
 
         $('#discount_amount').val(discountAmt.toFixed(2));
         $('#total_after_discount').val(totalAfterDiscount.toFixed(2));
-        $('#total_with_gst').val(totalWithGst.toFixed(2));
-    }
-
-
-    $('#scheme_id').change(function() {
-        let selectedOption = $(this).find(':selected');
-        let schemeDiscount = parseFloat(selectedOption.data('discount')) || 0;
-
-        // Display scheme discount
-        $('#scheme_discount').val(schemeDiscount);
-
-        // Trigger recalculation if course fee already loaded
-        calculateTotals();
-    });
-
-    function calculateTotals() {
-        let fee = parseFloat($('#course_fee_hidden').val()) || 0;
-        let discountPercent = parseFloat($('#scheme_discount').val()) || 0; // use scheme_discount
-
-        let discountAmt = (fee * discountPercent) / 100;
-        let totalAfterDiscount = fee - discountAmt;
-        let gst = totalAfterDiscount * 0.18;
-        let totalWithoutGst = totalAfterDiscount - gst;
-        let Gst = gst;
-        let totalWithGst = totalWithoutGst + gst;
-
-
-        $('#discount_amount').val(discountAmt.toFixed(2));
-        $('#total_after_discount').val(totalAfterDiscount.toFixed(2));
-        $('#total_without_gst').val(totalWithoutGst.toFixed(2));
-        $('#gst').val(Gst.toFixed(2));
         $('#total_with_gst').val(totalWithGst.toFixed(2));
     }
 </script>

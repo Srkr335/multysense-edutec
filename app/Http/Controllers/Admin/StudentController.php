@@ -89,101 +89,7 @@ class StudentController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    // public function store(Request $request)
-    // {
-    //     $request->validate([
-    //         'email' => 'required|email|unique:users,email',
-    //         'batch' => 'required|integer|exists:batches,id',
-
-    //     ]);
-
-    //     $schemeDtl = Scheme::find($request->scheme);
-    //     $offerPercentage = $schemeDtl->discount;
-    //     $courseFee = $request->course_fee;
-    //     $discountAmount = ($courseFee * $offerPercentage) / 100;
-    //     $courseTotalAmount = $courseFee - $discountAmount;
-
-    //     $user = new User();
-    //     $user->name = $request->name;
-    //     $user->email = $request->email;
-    //     $user->password = Hash::make($request->password);
-    //     $user->mobile_no = $request->phone;
-    //     $user->is_student = 1;
-    //     $user->save();
-
-    //     $studentCode = random_int(100000, 999999);
-
-    //     $student = new Student();
-    //     $student->student_code = $studentCode;
-    //     $student->user_id = $user->id;
-    //     $student->mobile_no = $request->phone;
-    //     $student->email = $request->email;
-    //     $student->dob = $request->b_day;
-    //     $student->country_id = $request->country;
-    //     $student->city = $request->city;
-    //     $student->pincode = $request->zipcode;
-    //     $student->address_1 = $request->address_1;
-    //     $student->address_2 = $request->address_2;
-    //     $groups = ['Blue', 'Yellow', 'Red', 'Green'];
-    //     $randomGroup = Arr::random($groups); // Laravel helper
-    //     $student->group = $randomGroup;
-
-    //     if ($request->hasFile('image')) {
-    //         $imageName = time() . '.' . $request->image->extension();
-    //         $request->image->move(public_path('/images/student'), $imageName);
-    //         $student->image = $imageName;
-    //     }
-
-    //     $student->batch_id = $request->batch;
-    //     $student->scheme_id = $request->scheme;
-    //     $student->category_id = $request->category;
-    //     $student->centre_id = $request->centre;
-    //     $student->course_id = $request->course;
-    //     $student->status = $request->status;
-
-    //     // Fetch required values for reg_no
-    //     $centre = Centre::find($request->centre);
-    //      $districtNo = str_pad($centre->district_no ?? '0', 2, '0', STR_PAD_LEFT);
-    //     $centreNo = str_pad($request->centre, 2, '0', STR_PAD_LEFT);
-    //     $batchNo = str_pad($request->batch, 2, '0', STR_PAD_LEFT);
-    //     $courseNo = str_pad($request->course, 2, '0', STR_PAD_LEFT);
-    //     $year = date('y');
-
-    //     // Save student temporarily to get the ID
-    //     $student->save();
-
-    //     // Generate register number: W + year + district + centre + batch + course + student_id
-    //     $registerNo = 'W' . $year . $districtNo . $centreNo . $batchNo . $courseNo . str_pad($student->id, 3, '0', STR_PAD_LEFT);
-    //     $student->reg_no = $registerNo;
-    //     $student->save();
-
-    //     if ($request->course) {
-    //         $purchased = new StudentPurchasedCourse();
-    //         $purchased->student_id = $student->id;
-    //         $purchased->course_id = $request->course;
-    //         $purchased->course_total_amount = $courseTotalAmount;
-    //         $purchased->installment = $request->course_installment;
-    //         $purchased->purchased_date = $student->created_at;
-    //         $purchased->save();
-    //     }
-    // // Step 1: Fetch all tutors
-    // $tutors = Tutor::all();
-    // $tutorCount = $tutors->count();
-
-    //         if ($tutorCount > 0) {
-    //           $pointsPerTutor = 100 / $tutorCount;
-
-    //     // Step 2: Save points for each tutor
-    //     foreach ($tutors as $tutor) {
-    //         $tutorPoint = new TutorPoints(); // Make sure this model exists
-    //         $tutorPoint->student_id = $student->id;
-    //         $tutorPoint->tutor_id = $tutor->id;
-    //         $tutorPoint->points = $pointsPerTutor;
-    //         $tutorPoint->save();
-    //     }
-    // }
-    //     return redirect()->route('admin.student.index')->with('success', 'Student added successfully');
-    // }
+   
 
 
 public function store(Request $request)
@@ -199,6 +105,8 @@ public function store(Request $request)
     $courseFee = $request->course_fee;
     $discountAmount = ($courseFee * $offerPercentage) / 100;
     $courseTotalAmount = $courseFee - $discountAmount;
+    // // if the Total Amount with GST
+    // $totalamountgst = $courseTotalAmount + ($courseTotalAmount * 18 / 100); // Assuming 18% GST
 
     $user = new User();
     $user->name = $request->name;
@@ -264,13 +172,15 @@ public function store(Request $request)
         $purchased->student_id = $student->id;
         $purchased->course_id = $request->course;
         $purchased->course_total_amount = $courseTotalAmount;
+          //if the Total Amt with GST 
+    //  $purchased->course_total_amount = $totalamountgst;
         $purchased->installment = $request->course_installment;
         $purchased->purchased_date = $student->created_at;
         $purchased->save();
     }
-// Step 1: Fetch all tutors
-$tutors = Tutor::all();
-$tutorCount = $tutors->count();
+  // Step 1: Fetch all tutors
+    $tutors = Tutor::all();
+    $tutorCount = $tutors->count();
 
         if ($tutorCount > 0) {
           $pointsPerTutor = 100 / $tutorCount;
@@ -333,60 +243,66 @@ $tutorCount = $tutors->count();
 
         return redirect()->back()->with('success', 'Points allocated successfully.');
     }
-
     /**
      * Display the specified resource.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
-    {
-        $student = Student::find($id);
-        $purchasedCouse = StudentPurchasedCourse::where('student_id', $id)->first();
-        $wishlistedCousers = StudentWishlistedCourse::where('student_id', $id)->get();
-        $studentPayments = StudentPayment::where('student_id', $id)->orderBy('created_at', 'asc')->get();
-        $totalDue = $studentPayments->sum('due_amount'); // Sum up all due amounts
-        $totalPaid = $studentPayments->sum('pay_amount');
-        $totalamount = 0;
-        foreach ($studentPayments as $studentpayment) {
-            // Calculate total due amount from previous payments
-            $totalDue = $studentpayment->due_amount ?? 0;
 
-            // Calculate the next installment
-            $currentInstallment = $studentpayment->current_installment ?? 0;
 
-            // Calculate total amount due (current installment + previous dues)
-            $totalamount = $currentInstallment + $totalDue;
 
-            // Calculate how much has already been paid in total
-            $totalPaid = StudentPayment::where('student_id', $studentpayment->student_id)
-                ->where('course_id', $studentpayment->course_id)
-                ->sum('pay_amount');
+public function show($id)
+{
+    $student = Student::find($id);
+    $purchasedCouse = StudentPurchasedCourse::where('student_id', $id)->first();
+    $wishlistedCousers = StudentWishlistedCourse::where('student_id', $id)->get();
+    $studentPayments = StudentPayment::where('student_id', $id)->orderBy('created_at', 'asc')->get();
+    $totalAmount = $purchasedCouse->course_total_amount ?? 0;
+    $totalInstallments = $purchasedCouse->installment ?? 0;
+    $totalPaid = $studentPayments->sum('pay_amount');
+    $totalDue = $totalAmount - $totalPaid;
+    $installmentAmount = $totalInstallments > 0 ? $totalAmount / $totalInstallments : 0;
 
-            // Get total course amount
-            $courseAmount = $studentpayment->amount ?? 0;
+if ($totalDue <= 0) {
+    $nextInstallment = 0;
+} elseif ($totalPaid == 0) {
+    //  First payment not yet made
+    $nextInstallment = $installmentAmount;
+} else {
+    // Calculate installments already covered
+    $completedInstallments = floor($totalPaid / $installmentAmount);
+    $currentInstallmentPaid = $totalPaid - ($completedInstallments * $installmentAmount);
+    $remainingCurrent = $installmentAmount - $currentInstallmentPaid;
 
-            // If total paid is greater than or equal to course amount, no next installment
-            if ($totalPaid >= $courseAmount) {
-                $totalamount = 0;
-            }
-
-            // Now you can echo or pass $totalamount to view
-        }
-
-        $totalPaid =  $studentPayments->sum('pay_amount');
-        // $monthlyInstallment =  $purchasedCouse->course_total_amount/$purchasedCouse->installment;
-        if ($purchasedCouse->installment > 0) {
-            $monthlyInstallment = $purchasedCouse->course_total_amount / $purchasedCouse->installment;
-            $monthlyInstallment = number_format($monthlyInstallment, 2); // Formats to two decimal places
-        } else {
-            $monthlyInstallment = 0; // Handle case where installment is zero
-        }
-
-        $courses = Course::where('status', 1)->pluck('title', 'id')->toArray();
-        return view('admin.pages.students.show', compact('student', 'purchasedCouse', 'wishlistedCousers', 'courses', 'studentPayments', 'totalPaid', 'monthlyInstallment', 'totalamount', 'totalDue'));
+    if ($completedInstallments < $totalInstallments - 1) {
+        $nextInstallment = $installmentAmount + $remainingCurrent;
+    } else {
+        $nextInstallment = $totalDue;
     }
+
+    if ($nextInstallment > $totalDue) {
+        $nextInstallment = $totalDue;
+    }
+}
+
+    $courses = Course::where('status', 1)->pluck('title', 'id')->toArray();
+
+    return view('admin.pages.students.show', compact(
+        'student',
+        'purchasedCouse',
+        'wishlistedCousers',
+        'courses',
+        'studentPayments',
+        'totalPaid',
+        'totalDue',
+        'installmentAmount',
+        'nextInstallment',
+        'totalAmount'
+    ));
+}
+
+
 
     /**
      * Show the form for editing the specified resource.

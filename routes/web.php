@@ -178,6 +178,9 @@ Route::middleware(['auth', 'user-access:admin'])->group(function () {
 
         //exam result
         Route::resource('exam_result', ResultController::class);
+
+        Route::get('/admin/result/{id}', [ResultController::class, 'show'])->name('admin.result.show');
+
         //  Route::post('modules/update',[ModulesController::class, 'update'])->name('admin.modules.update');
         //  Route::post('modules/delete',[ModulesController::class, 'destroy'])->name('admin.modules.delete');
 

@@ -23,6 +23,7 @@ class ResultsTableSeeder extends Seeder
         $centres = DB::table('centres')->pluck('id');
 
         $slno = 1001;
+        $certificateno=2001;
 
         foreach (range(1, 50) as $i) { // Create 50 dummy results
             $student_id = $students->random();
@@ -35,7 +36,7 @@ class ResultsTableSeeder extends Seeder
             $totalQuestions = 100;
             $correct = rand(0, $marks);
             $wrong = $totalQuestions - $correct;
-            $percentage = ($marks / $totalQuestions) * 100;
+            $percentage = ($marks / $totalQuestions) * 100; 
             
             // Determine grade
             if ($percentage >= 90) $grade = 'A+';
@@ -49,14 +50,14 @@ class ResultsTableSeeder extends Seeder
 
             DB::table('results')->insert([
                 'slno' => $slno++,
-                'certificateno' => 'CERT' . str_pad($slno, 5, '0', STR_PAD_LEFT),
+                'certificateno' =>$certificateno++,
                 'exam_id' => $exam_id,
                 'exam_name' => 'Exam ' . $exam_id,
                 'batch_id' => $batch_id,
                 'course_id' => $course_id,
                 'centre_id' => $centre_id,
                 'student_id' => $student_id,
-                'reg_no' => 'REG' . rand(1000, 9999),
+                'reg_no' => 'MS' . rand(1000, 9999),
                 'marks' => $marks,
                 'correct_answer_count' => $correct,
                 'wrong_answer_count' => $wrong,

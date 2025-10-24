@@ -71,7 +71,7 @@ public function dashboard()
             ->select('students.group', DB::raw('SUM(student_points.points) as total_points'))
             ->groupBy('students.group')
             ->orderByDesc('total_points')
-            ->first();
+            ->first()?? (object)['group' => 'No Group'];
 
         return view('admin.pages.dashboard', compact(
             'user','courseCount','studentsCount','totalEarnings','teacherCount',

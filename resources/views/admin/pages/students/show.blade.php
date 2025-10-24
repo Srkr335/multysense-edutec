@@ -15,7 +15,7 @@
                         <div class="profile-bg">
                             <img src="{{ asset('img/profile-bg.jpg') }}" alt="">
                             <div class="profile-img">
-                                <a href="#"><img alt="" src="{{ asset('/images/student/' . $student->image) }}"></a>
+                                <a href="#"><img alt="" src="{{ asset('/images/student/' . $student->image) }}??"></a>
                             </div>
                         </div>
                         <div class="profile-group">
@@ -94,36 +94,39 @@
                     </div>
                     <div class="comman-space pb-0">
 
-                        <div class="settings-tickets-blk course-instruct-blk ">
+                      <div class="settings-tickets-blk course-instruct-blk">
+    <table class="table table-nowrap mb-2 dataTable text-center">
+        <thead class="thead-light">
+            <tr>
+                <th>Total Amount</th>
+                <th>Total Paid</th>
+                <th>Total Due</th>
+                <th>Installment Amount</th>
+                <th>1st/Next Installment</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>{{ number_format($purchasedCouse->course_total_amount, 2) }}</td>
+                <td>{{ $totalPaid }}</td>
+                <td>{{ $totalDue }}</td>
+                <td>{{ $installmentAmount }}</td>
+                <td>{{ $nextInstallment }}</td>
+                <td>
+                    <button type="button" 
+                            class="btn btn-info text-white" 
+                            data-toggle="modal"
+                            data-target="#addPayment"
+                            data-course-id="{{ $purchasedCouse->course->id }}">
+                        Add Payment
+                    </button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
 
-                            <table class="table table-nowrap mb-2 dataTable">
-                                <thead>
-                                    <tr>
-                                        <th>Total Amount</th>
-                                        <th>Total Paid</th>
-                                        <th>Total Due</th>
-                                        <th>Installment Amount</th>
-                                        <th>Next Installment</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>{{ $purchasedCouse->course_total_amount}}</td>
-                                        <td>{{$totalPaid}}</td>
-                                        <td>{{($purchasedCouse->course_total_amount)-$totalPaid}}</td>
-                                        <td>{{$monthlyInstallment}}</td>
-                                        <td>{{$totalamount}}</td>
-                                        <td> <button type="button" class="btn btn-info text-white" data-toggle="modal"
-                                                data-target="#addPayment"
-                                                data-course-id="{{ $purchasedCouse->course->id }}">
-                                                Add Payment
-                                            </button></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-
-                        </div>
                     </div>
                     <div class="card-body p-4">
                         <div class="row">

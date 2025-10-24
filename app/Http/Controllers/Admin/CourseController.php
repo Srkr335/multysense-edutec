@@ -261,7 +261,7 @@ class CourseController extends Controller
         $categories = Category::get();
         $course = Course::find($id);
         $centres = Centre::where('status', 1)->get();
-        $durations = Duration::where('status', 1)->get(); // ✅ add this
+        $durations = Duration::where('status', 1)->get();
 
 
         // $centres = Centre::where('status',1)->get();

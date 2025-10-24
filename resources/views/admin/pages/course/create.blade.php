@@ -660,7 +660,6 @@
                         </div>
                     </form>
 <meta name="csrf-token" content="{{ csrf_token() }}">
-
 <div class="card shadow-lg border-0 rounded-3">
     <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
         <h5 class="mb-0"><i class="fas fa-clock mr-2"></i> Add Duration</h5>
@@ -668,12 +667,11 @@
             <span aria-hidden="true">&times;</span>
         </button>
     </div>
-
     <div class="card-body">
         <form id="addDurationForm">
             <div class="form-group mb-3">
-                <label class="font-weight-semibold">Name <span class="text-danger">*</span></label>
-                <input type="text" id="durationName" class="form-control" placeholder="Enter duration name">
+                <label class="font-weight-semibold">Year <span class="text-danger">*</span></label>
+                <input type="text" id="durationName" class="form-control" placeholder="Enter Year">
             </div>
 
             <div class="form-group mb-3">
